@@ -11,9 +11,9 @@
 #import "KCBanner.h"
 
 @interface KCBannerView () <UICollectionViewDataSource, UICollectionViewDelegate>
+
 @property (nonatomic, weak) UICollectionView *collectionView;
 @property (nonatomic, weak) UIPageControl *pageControl;
-
 
 @property (nonatomic, strong) NSTimer *timer;
 
@@ -71,29 +71,22 @@ static NSString *const ID = @"banner";
 {
     if (self = [super initWithFrame:frame]) {
         
-        self.timeInterval = 3.0;
+        self.timeInterval = 5.0;
         self.repeat = YES;
         
         [self setupCollectionView];
         
         [self setupPageControl];
         
-        
     }
     return self;
-}
-
-- (void)didMoveToSuperview
-{
-    [self addTimer];
-    
 }
 
 - (void)setupPageControl
 {
     UIPageControl *pageControl = [[UIPageControl alloc] init];
     pageControl.hidesForSinglePage = YES;
-    pageControl.currentPageIndicatorTintColor = [UIColor orangeColor];
+    pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
     pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
     [self addSubview:pageControl];
     self.pageControl = pageControl;
@@ -128,29 +121,14 @@ static NSString *const ID = @"banner";
     CGFloat pageControlH = pageWH;
     CGFloat pageControlW = pageWH * self.pageControl.numberOfPages;
     
-    CGFloat pageControlX = self.frame.size.width - pageControlW;
-    CGFloat pageControlY = self.frame.size.height - pageControlH;
+    CGFloat pageControlX = (self.frame.size.width - pageControlW) * 0.5;
+    CGFloat pageControlY = self.frame.size.height - pageControlH - 5;
     
     self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlW, pageControlH);
     
     self.collectionView.frame = self.bounds;
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
     flowLayout.itemSize = self.collectionView.bounds.size;
-    
-}
-
-#pragma mark -公共方法
-
-- (BOOL)isRepeat
-{
-    return [self.datasource numberOfBannersInBannerView:self] <= 1 ? NO : _repeat;
-}
-
-- (void)setDatasource:(id<KCBannerViewDatasource>)datasource
-{
-    _datasource = datasource;
-    
-    self.pageControl.numberOfPages = [self.datasource numberOfBannersInBannerView:self];
     
 }
 
@@ -200,6 +178,28 @@ static NSString *const ID = @"banner";
 {
     NSInteger currentPage = (NSInteger)(scrollView.contentOffset.x / scrollView.bounds.size.width + 0.5) % [self.datasource numberOfBannersInBannerView:self];
     self.pageControl.currentPage = currentPage;
+}
+
+#pragma mark -公共方法
+- (void)reloadData
+{
+    [self removeTimer];
+    [self addTimer];
+    
+    self.pageControl.numberOfPages = [self.datasource numberOfBannersInBannerView:self];
+}
+
+- (BOOL)isRepeat
+{
+    return [self.datasource numberOfBannersInBannerView:self] <= 1 ? NO : _repeat;
+}
+
+- (void)setDatasource:(id<KCBannerViewDatasource>)datasource
+{
+    _datasource = datasource;
+    
+    [self reloadData];
+    
 }
 
 

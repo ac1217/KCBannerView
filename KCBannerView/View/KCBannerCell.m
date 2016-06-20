@@ -8,7 +8,8 @@
 
 #import "KCBannerCell.h"
 #import "KCBanner.h"
-#import "UIImageView+SDWebImage.h"
+#import "YYWebImage.h"
+
 @interface KCBannerCell ()
 @property (nonatomic, weak) UIImageView *imageView;
 @property (nonatomic, weak) UILabel *titleLabel;
@@ -48,23 +49,40 @@
 {
     _banner = banner;
     
-    if ([banner pic]) {
+    if ([banner respondsToSelector:@selector(pic)]) {
         
-        self.imageView.image = [banner pic];
         
-    }else {
+        if ([banner pic]) {
+            
+            self.imageView.image = [banner pic];
+        }
         
-        [self.imageView imageWithUrl:[banner picUrl]];
+        
+    } else if ([banner respondsToSelector:@selector(picUrl)]) {
+        
+        if ([banner picUrl]) {
+            
+            [self.imageView yy_setImageWithURL:[banner picUrl]
+                                       options:YYWebImageOptionProgressiveBlur | YYWebImageOptionSetImageWithFadeAnimation];
+        }
         
     }
     
-    if ([banner title].length) {
-        self.titleLabel.hidden = NO;
-        self.titleLabel.text = [banner title];
-    }else {
+    if ([banner respondsToSelector:@selector(title)]) {
         
+        if ([banner title].length) {
+            self.titleLabel.hidden = NO;
+            self.titleLabel.text = [banner title];
+        }else {
+            
+            self.titleLabel.hidden = YES;
+        }
+        
+    }else {
         self.titleLabel.hidden = YES;
     }
+    
+    
     
 }
 

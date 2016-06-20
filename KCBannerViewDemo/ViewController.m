@@ -73,6 +73,8 @@
     // 添加
     [self.view addSubview:bannerView];
     
+//    self.view.layer.cornerRadius
+    
     
 }
 #pragma mark -KCBannerViewDelegate

@@ -38,6 +38,7 @@
 
 // 代理
 @property (nonatomic, weak) id<KCBannerViewDelegate> delegate;
+
 // 数据源
 @property (nonatomic, weak) id<KCBannerViewDatasource> datasource;
 
@@ -46,5 +47,8 @@
 
 // 是否循环轮播，默认为YES，当数据数组个数少于等于1时此值为NO
 @property (nonatomic, assign, getter=isRepeat) BOOL repeat;
+
+// 刷新数据
+- (void)reloadData;
 
 @end
