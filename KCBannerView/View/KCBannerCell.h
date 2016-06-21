@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 @class KCBanner;
 
+extern NSString *const KCBannerCellReuseID;
+
 @protocol KCBannerProtocol <NSObject>
 
 @optional

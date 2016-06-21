@@ -10,6 +10,8 @@
 #import "KCBanner.h"
 #import "YYWebImage.h"
 
+NSString *const KCBannerCellReuseID = @"KCBannerCell";
+
 @interface KCBannerCell ()
 @property (nonatomic, weak) UIImageView *imageView;
 @property (nonatomic, weak) UILabel *titleLabel;
@@ -58,7 +60,9 @@
         }
         
         
-    } else if ([banner respondsToSelector:@selector(picUrl)]) {
+    }
+    
+    if ([banner respondsToSelector:@selector(picUrl)]) {
         
         if ([banner picUrl]) {
             

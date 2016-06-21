@@ -23,7 +23,6 @@
 
 static const NSInteger KCMaxSection = 100;
 
-static NSString *const ID = @"banner";
 
 - (void)addTimer
 {
@@ -50,7 +49,7 @@ static NSString *const ID = @"banner";
         item = 0;
         section++;
     }
-    
+        
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
     
 }
@@ -101,7 +100,7 @@ static NSString *const ID = @"banner";
     
     UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
     [self addSubview:collectionView];
-    [collectionView registerClass:[KCBannerCell class] forCellWithReuseIdentifier:ID];
+    [collectionView registerClass:[KCBannerCell class] forCellWithReuseIdentifier:KCBannerCellReuseID];
     collectionView.backgroundColor = [UIColor whiteColor];
     collectionView.showsHorizontalScrollIndicator = NO;
     collectionView.showsVerticalScrollIndicator = NO;
@@ -146,7 +145,7 @@ static NSString *const ID = @"banner";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    KCBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ID forIndexPath:indexPath];
+    KCBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:KCBannerCellReuseID forIndexPath:indexPath];
     
     cell.banner = [self.datasource bannerView:self bannerForItemAtIndex:indexPath.row];
     
