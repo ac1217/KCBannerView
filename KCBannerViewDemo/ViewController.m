@@ -13,6 +13,10 @@
 
 @property (nonatomic, strong) NSArray *banners;
 
+
+@property (nonatomic, strong) KCBannerView *bannerView;
+
+
 @end
 
 @implementation ViewController
@@ -48,10 +52,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    // Do any additional setup afte
     
     // 创建
-    KCBannerView *bannerView = [[KCBannerView alloc] initWithFrame:CGRectMake(50, 100, 300, 150)];
+    KCBannerView *bannerView = [[KCBannerView alloc] init];
     // 设置代理
     bannerView.delegate = self;
     // 数据源
@@ -59,10 +63,22 @@
     // 添加
     [self.view addSubview:bannerView];
     
-//    self.view.layer.cornerRadius
+    self.bannerView = bannerView;
     
     
 }
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    
+    
+    self.bannerView.frame = CGRectMake(0, 0, self.view.frame.size.width, 150);
+    
+    
+}
+
 #pragma mark -KCBannerViewDelegate
 - (void)bannerView:(KCBannerView *)bannerView didSelectBannerAtIndex:(NSInteger)index
 {

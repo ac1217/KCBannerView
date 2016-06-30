@@ -22,4 +22,8 @@ extern NSString *const KCBannerCellReuseID;
 
 @interface KCBannerCell : UICollectionViewCell
 @property (nonatomic, strong) id<KCBannerProtocol> banner;
+
+
+@property (nonatomic, weak, readonly) UIImageView *imageView;
+
 @end

@@ -10,6 +10,8 @@
 #import "KCBanner.h"
 #import "YYWebImage.h"
 
+
+
 NSString *const KCBannerCellReuseID = @"KCBannerCell";
 
 @interface KCBannerCell ()
@@ -24,6 +26,8 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
     if (self = [super initWithFrame:frame]) {
         
         UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.clipsToBounds = YES;
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:imageView];
         self.imageView = imageView;
         
@@ -44,7 +48,7 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
     
     self.imageView.frame = self.bounds;
     
-    self.titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 30);
+    self.titleLabel.frame = CGRectMake(0, 0, self.contentView.frame.size.width, 30);
 }
 
 - (void)setBanner:(id<KCBannerProtocol>)banner

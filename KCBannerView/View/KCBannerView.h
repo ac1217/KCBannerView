@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "KCBanner.h"
+
+typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
+    KCBannerViewScrollDirectionVertical,
+    KCBannerViewScrollDirectionHorizontal
+};
+
 @class KCBannerView;
 
 // banner数据需要提供协议的接口
@@ -48,7 +54,10 @@
 // 是否循环轮播，默认为YES，当数据数组个数少于等于1时此值为NO
 @property (nonatomic, assign, getter=isRepeat) BOOL repeat;
 
+@property (nonatomic, assign) KCBannerViewScrollDirection scrollDirection;
+
 // 刷新数据
 - (void)reloadData;
+
 
 @end

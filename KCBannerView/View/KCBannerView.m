@@ -9,6 +9,10 @@
 #import "KCBannerView.h"
 #import "KCBannerCell.h"
 #import "KCBanner.h"
+#import "KCBannerViewLayout.h"
+
+
+static const NSInteger KCMaxSection = 100;
 
 @interface KCBannerView () <UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -17,12 +21,13 @@
 
 @property (nonatomic, strong) NSTimer *timer;
 
+@property (nonatomic, weak) UIScrollView *sv;
+
 @end
 
 @implementation KCBannerView
 
-static const NSInteger KCMaxSection = 100;
-
+#pragma mark -内部方法
 
 - (void)addTimer
 {
@@ -49,8 +54,16 @@ static const NSInteger KCMaxSection = 100;
         item = 0;
         section++;
     }
+    
+    if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
         
-    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+        
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    }else {
+        
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+    }
+    
     
 }
 
@@ -60,11 +73,19 @@ static const NSInteger KCMaxSection = 100;
     
     NSIndexPath *resetIndexPath = [NSIndexPath indexPathForItem:visibleIndexPath.item inSection:KCMaxSection / 2];
     
-    [self.collectionView scrollToItemAtIndexPath:resetIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+    if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
+        
+        [self.collectionView scrollToItemAtIndexPath:resetIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    }else {
+        
+        [self.collectionView scrollToItemAtIndexPath:resetIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+    }
+    
     
     return resetIndexPath;
 }
 
+#pragma mark -初始化
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -72,6 +93,7 @@ static const NSInteger KCMaxSection = 100;
         
         self.timeInterval = 5.0;
         self.repeat = YES;
+//        self.scrollDirection = KCBannerViewScrollDirectionHorizontal;
         
         [self setupCollectionView];
         
@@ -94,11 +116,10 @@ static const NSInteger KCMaxSection = 100;
 
 - (void)setupCollectionView
 {
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    flowLayout.minimumLineSpacing = 0;
+    KCBannerViewLayout *layout = [[KCBannerViewLayout alloc] init];
+    layout.scrollDirection = (UICollectionViewScrollDirection)self.scrollDirection;
     
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     [self addSubview:collectionView];
     [collectionView registerClass:[KCBannerCell class] forCellWithReuseIdentifier:KCBannerCellReuseID];
     collectionView.backgroundColor = [UIColor whiteColor];
@@ -121,15 +142,14 @@ static const NSInteger KCMaxSection = 100;
     CGFloat pageControlW = pageWH * self.pageControl.numberOfPages;
     
     CGFloat pageControlX = (self.frame.size.width - pageControlW) * 0.5;
-    CGFloat pageControlY = self.frame.size.height - pageControlH - 5;
+    CGFloat pageControlY = self.frame.size.height - pageControlH;
     
     self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlW, pageControlH);
     
     self.collectionView.frame = self.bounds;
-    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-    flowLayout.itemSize = self.collectionView.bounds.size;
     
 }
+
 
 #pragma mark -UICollectionViewDataSource
 
@@ -175,7 +195,15 @@ static const NSInteger KCMaxSection = 100;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSInteger currentPage = (NSInteger)(scrollView.contentOffset.x / scrollView.bounds.size.width + 0.5) % [self.datasource numberOfBannersInBannerView:self];
+    NSInteger currentPage = 0;
+    if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
+        
+        
+       currentPage = (NSInteger)(scrollView.contentOffset.x / scrollView.bounds.size.width + 0.5) % [self.datasource numberOfBannersInBannerView:self];
+    }else {
+        
+        currentPage = (NSInteger)(scrollView.contentOffset.y / scrollView.bounds.size.height + 0.5) % [self.datasource numberOfBannersInBannerView:self];
+    }
     self.pageControl.currentPage = currentPage;
 }
 
@@ -200,6 +228,16 @@ static const NSInteger KCMaxSection = 100;
     [self reloadData];
     
 }
+
+- (void)setScrollDirection:(KCBannerViewScrollDirection)scrollDirection
+{
+    _scrollDirection = scrollDirection;
+    
+    KCBannerViewLayout *layout = (KCBannerViewLayout *)self.collectionView.collectionViewLayout;
+    
+    layout.scrollDirection = (UICollectionViewScrollDirection)scrollDirection;
+}
+
 
 
 
