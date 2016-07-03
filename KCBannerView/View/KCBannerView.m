@@ -93,7 +93,7 @@ static const NSInteger KCMaxSection = 100;
         
         self.timeInterval = 5.0;
         self.repeat = YES;
-//        self.scrollDirection = KCBannerViewScrollDirectionHorizontal;
+        self.scrollDirection = KCBannerViewScrollDirectionHorizontal;
         
         [self setupCollectionView];
         

@@ -20,6 +20,8 @@
     
 }
 
+/*
+
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds
 {
     return YES;
@@ -58,6 +60,7 @@
     return attrs;
     
 }
+ */
 
 
 @end
