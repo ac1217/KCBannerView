@@ -14,10 +14,12 @@
 
 static const NSInteger KCMaxSection = 100;
 
-@interface KCBannerView () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface KCBannerView () <UICollectionViewDataSource, UICollectionViewDelegate>{
+    UIPageControl *_pageControl;
+}
 
-@property (nonatomic, weak) UICollectionView *collectionView;
-@property (nonatomic, weak) UIPageControl *pageControl;
+@property (nonatomic, strong) UICollectionView *collectionView;
+
 
 @property (nonatomic, strong) NSTimer *timer;
 
@@ -105,44 +107,12 @@ static const NSInteger KCMaxSection = 100;
 
 - (void)setup
 {
-    
     self.timeInterval = 5.0;
     self.repeat = YES;
     self.scrollDirection = KCBannerViewScrollDirectionHorizontal;
     
-    [self setupCollectionView];
-    
-    [self setupPageControl];
-}
-
-- (void)setupPageControl
-{
-    UIPageControl *pageControl = [[UIPageControl alloc] init];
-    pageControl.hidesForSinglePage = YES;
-    pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
-    pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
-    [self addSubview:pageControl];
-    self.pageControl = pageControl;
-
-}
-
-- (void)setupCollectionView
-{
-    KCBannerViewLayout *layout = [[KCBannerViewLayout alloc] init];
-    layout.scrollDirection = (UICollectionViewScrollDirection)self.scrollDirection;
-    
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-    [self addSubview:collectionView];
-    [collectionView registerClass:[KCBannerCell class] forCellWithReuseIdentifier:KCBannerCellReuseID];
-    collectionView.backgroundColor = [UIColor whiteColor];
-    collectionView.showsHorizontalScrollIndicator = NO;
-    collectionView.showsVerticalScrollIndicator = NO;
-    collectionView.pagingEnabled = YES;
-    collectionView.delegate = self;
-    collectionView.dataSource = self;
-     
-    self.collectionView = collectionView;
-    
+    [self addSubview:self.collectionView];
+    [self addSubview:self.pageControl];
 }
 
 - (void)layoutSubviews
@@ -250,6 +220,44 @@ static const NSInteger KCMaxSection = 100;
     layout.scrollDirection = (UICollectionViewScrollDirection)scrollDirection;
 }
 
+#pragma mark -懒加载
+- (UIPageControl *)pageControl
+{
+    if (!_pageControl) {
+        
+        _pageControl = [[UIPageControl alloc] init];
+        _pageControl.hidesForSinglePage = YES;
+        _pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
+        _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+        
+        
+    }
+    return _pageControl;
+}
+
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        
+        
+        KCBannerViewLayout *layout = [[KCBannerViewLayout alloc] init];
+        layout.scrollDirection = (UICollectionViewScrollDirection)self.scrollDirection;
+        
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        
+        [_collectionView registerClass:[KCBannerCell class] forCellWithReuseIdentifier:KCBannerCellReuseID];
+        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.showsHorizontalScrollIndicator = NO;
+        _collectionView.showsVerticalScrollIndicator = NO;
+        _collectionView.pagingEnabled = YES;
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        
+        
+        
+    }
+    return _collectionView;
+}
 
 
 

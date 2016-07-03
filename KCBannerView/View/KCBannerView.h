@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 @interface KCBannerView : UIView
 
 // 页数控件
-@property (nonatomic, weak, readonly) UIPageControl *pageControl;
+@property (nonatomic, strong, readonly) UIPageControl *pageControl;
 
 // 代理
 @property (nonatomic, weak) id<KCBannerViewDelegate> delegate;
