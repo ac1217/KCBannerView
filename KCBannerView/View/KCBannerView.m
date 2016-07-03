@@ -91,16 +91,28 @@ static const NSInteger KCMaxSection = 100;
 {
     if (self = [super initWithFrame:frame]) {
         
-        self.timeInterval = 5.0;
-        self.repeat = YES;
-        self.scrollDirection = KCBannerViewScrollDirectionHorizontal;
-        
-        [self setupCollectionView];
-        
-        [self setupPageControl];
-        
+        [self setup];
     }
     return self;
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    [self setup];
+}
+
+- (void)setup
+{
+    
+    self.timeInterval = 5.0;
+    self.repeat = YES;
+    self.scrollDirection = KCBannerViewScrollDirectionHorizontal;
+    
+    [self setupCollectionView];
+    
+    [self setupPageControl];
 }
 
 - (void)setupPageControl
