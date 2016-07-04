@@ -177,14 +177,17 @@ static const NSInteger KCMaxSection = 100;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    NSInteger count = [self.datasource numberOfBannersInBannerView:self];
+    if (count == 0) return;
+    
     NSInteger currentPage = 0;
     if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
         
         
-       currentPage = (NSInteger)(scrollView.contentOffset.x / scrollView.bounds.size.width + 0.5) % [self.datasource numberOfBannersInBannerView:self];
+       currentPage = (NSInteger)(scrollView.contentOffset.x / scrollView.bounds.size.width + 0.5) % count;
     }else {
         
-        currentPage = (NSInteger)(scrollView.contentOffset.y / scrollView.bounds.size.height + 0.5) % [self.datasource numberOfBannersInBannerView:self];
+        currentPage = (NSInteger)(scrollView.contentOffset.y / scrollView.bounds.size.height + 0.5) % count;
     }
     self.pageControl.currentPage = currentPage;
 }
