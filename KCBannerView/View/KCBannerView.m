@@ -11,6 +11,22 @@
 #import "KCBanner.h"
 #import "KCBannerViewLayout.h"
 
+@implementation NSTimer (KCExtension)
+
++ (void)kc_block:(NSTimer *)timer {
+    if ([timer userInfo]) {
+        void (^block)(NSTimer *timer) = (void (^)(NSTimer *timer))[timer userInfo];
+        block(timer);
+    }
+}
+
++ (NSTimer *)kc_timerWithTimeInterval:(NSTimeInterval)ti block:(void(^)(NSTimer *timer))block repeats:(BOOL)yesOrNo
+{
+    return [NSTimer timerWithTimeInterval:ti target:self selector:@selector(kc_block:) userInfo:[block copy] repeats:yesOrNo];
+}
+
+@end
+
 
 static const NSInteger KCMaxSection = 100;
 
@@ -29,13 +45,21 @@ static const NSInteger KCMaxSection = 100;
 
 @implementation KCBannerView
 
+- (void)dealloc
+{
+    [self removeTimer];
+}
+
 #pragma mark -内部方法
 
 - (void)addTimer
 {
     if (!self.isRepeat) return;
     
-    self.timer = [NSTimer timerWithTimeInterval:self.timeInterval target:self selector:@selector(nextPage) userInfo:nil repeats:YES];
+    __weak typeof(self) weakSelf = self;
+    self.timer = [NSTimer kc_timerWithTimeInterval:self.timeInterval block:^(NSTimer *timer) {
+        [weakSelf nextPage];
+    } repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
 }
 
