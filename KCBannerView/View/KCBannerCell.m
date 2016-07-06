@@ -10,7 +10,8 @@
 #import "KCBanner.h"
 #import "YYWebImage.h"
 
-
+extern NSString *const KCBannerViewContentOffsetDicChangeNotification;
+extern NSString *const KCBannerViewDicChangeFrameKey;
 
 NSString *const KCBannerCellReuseID = @"KCBannerCell";
 
@@ -21,13 +22,18 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
 
 @implementation KCBannerCell
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
         
         UIImageView *imageView = [[UIImageView alloc] init];
-        imageView.clipsToBounds = YES;
         imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.clipsToBounds = YES;
         [self.contentView addSubview:imageView];
         self.imageView = imageView;
         
@@ -38,8 +44,20 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
         [self.contentView addSubview:titleLabel];
         self.titleLabel = titleLabel;
         
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(frameDidChange:) name:KCBannerViewContentOffsetDicChangeNotification object:nil];
+        
     }
     return self;
+}
+
+- (void)frameDidChange:(NSNotification *)note
+{
+    CGRect frame = [note.userInfo[KCBannerViewDicChangeFrameKey] CGRectValue];
+    self.imageView.frame = frame;
+    CGRect labelF = self.titleLabel.frame;
+    labelF.origin.y = self.imageView.frame.origin.y;
+    self.titleLabel.frame = labelF;
+    
 }
 
 - (void)layoutSubviews

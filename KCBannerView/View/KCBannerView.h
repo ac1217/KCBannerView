@@ -39,6 +39,9 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 
 @interface KCBannerView : UIView
 
+// 若需要下拉缩放效果，请使用此初始化方法
+- (instancetype)initWithScrollView:(UIScrollView *)scrollView;
+
 // 页数控件
 @property (nonatomic, strong, readonly) UIPageControl *pageControl;
 
@@ -51,7 +54,7 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 // 循环间隔
 @property (nonatomic, assign) CGFloat timeInterval;
 
-// 是否循环轮播，默认为YES，当数据数组个数少于等于1时此值为NO
+// 是否循环轮播，默认为YES，当数据个数少于等于1时此值为NO
 @property (nonatomic, assign, getter=isRepeat) BOOL repeat;
 
 @property (nonatomic, assign) KCBannerViewScrollDirection scrollDirection;

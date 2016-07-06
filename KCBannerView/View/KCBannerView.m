@@ -11,6 +11,9 @@
 #import "KCBanner.h"
 #import "KCBannerViewLayout.h"
 
+NSString *const KCBannerViewContentOffsetDicChangeNotification = @"KCBannerViewContentOffsetDicChangeNotification";
+NSString *const KCBannerViewDicChangeFrameKey = @"KCBannerViewDicChangeFrameKey";
+
 @implementation NSTimer (KCExtension)
 
 + (void)kc_block:(NSTimer *)timer {
@@ -32,6 +35,7 @@ static const NSInteger KCMaxSection = 100;
 
 @interface KCBannerView () <UICollectionViewDataSource, UICollectionViewDelegate>{
     UIPageControl *_pageControl;
+    BOOL _repeat;
 }
 
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -39,15 +43,20 @@ static const NSInteger KCMaxSection = 100;
 
 @property (nonatomic, strong) NSTimer *timer;
 
-@property (nonatomic, weak) UIScrollView *sv;
+@property (nonatomic, weak) UIScrollView *scrollView;
+
+@property (nonatomic, assign) CGRect changeFrame;
 
 @end
 
 @implementation KCBannerView
 
+
 - (void)dealloc
 {
     [self removeTimer];
+    
+    [self.scrollView removeObserver:self forKeyPath:@"contentOffset"];
 }
 
 #pragma mark -内部方法
@@ -55,6 +64,8 @@ static const NSInteger KCMaxSection = 100;
 - (void)addTimer
 {
     if (!self.isRepeat) return;
+    
+    [self removeTimer];
     
     __weak typeof(self) weakSelf = self;
     self.timer = [NSTimer kc_timerWithTimeInterval:self.timeInterval block:^(NSTimer *timer) {
@@ -83,13 +94,11 @@ static const NSInteger KCMaxSection = 100;
     
     if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
         
-        
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     }else {
         
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
     }
-    
     
 }
 
@@ -113,6 +122,46 @@ static const NSInteger KCMaxSection = 100;
 
 #pragma mark -初始化
 
+- (instancetype)initWithScrollView:(UIScrollView *)scrollView
+{
+    if (self = [super init]) {
+        
+        [scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
+        self.scrollView = scrollView;
+        
+        [self setup];
+    }
+    return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    CGFloat offsetY = [change[NSKeyValueChangeNewKey] CGPointValue].y;
+    
+    if (offsetY >= 0)
+    {
+        
+        CGRect frame = self.changeFrame;
+        frame.origin.y = 0;
+        self.changeFrame = frame;
+        self.collectionView.clipsToBounds = YES;
+        
+    }else {
+        
+        CGFloat delta = 0.0f;
+        CGRect rect = self.bounds;
+        delta = fabs(MIN(0.0f, offsetY));
+        rect.origin.y -= delta;
+        rect.size.height += delta;
+        self.changeFrame = rect;
+        self.collectionView.clipsToBounds = NO;
+        
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:KCBannerViewContentOffsetDicChangeNotification object:nil userInfo:@{KCBannerViewDicChangeFrameKey : [NSValue valueWithCGRect:self.changeFrame]}];
+    
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
@@ -131,9 +180,9 @@ static const NSInteger KCMaxSection = 100;
 
 - (void)setup
 {
-    self.timeInterval = 5.0;
-    self.repeat = YES;
-    self.scrollDirection = KCBannerViewScrollDirectionHorizontal;
+    _timeInterval = 5.0;
+    _repeat = YES;
+    _scrollDirection = KCBannerViewScrollDirectionHorizontal;
     
     [self addSubview:self.collectionView];
     [self addSubview:self.pageControl];
@@ -153,6 +202,8 @@ static const NSInteger KCMaxSection = 100;
     self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlW, pageControlH);
     
     self.collectionView.frame = self.bounds;
+    
+    self.changeFrame = self.bounds;
     
 }
 
@@ -219,10 +270,12 @@ static const NSInteger KCMaxSection = 100;
 #pragma mark -公共方法
 - (void)reloadData
 {
-    [self removeTimer];
-    [self addTimer];
+    [self.collectionView reloadData];
     
     self.pageControl.numberOfPages = [self.datasource numberOfBannersInBannerView:self];
+    
+    [self addTimer];
+    
 }
 
 - (BOOL)isRepeat
@@ -230,12 +283,23 @@ static const NSInteger KCMaxSection = 100;
     return [self.datasource numberOfBannersInBannerView:self] <= 1 ? NO : _repeat;
 }
 
+- (void)setRepeat:(BOOL)repeat
+{
+    _repeat = repeat;
+    
+    if (repeat) {
+        [self addTimer];
+    }else {
+        [self removeTimer];
+    }
+    
+}
+
 - (void)setDatasource:(id<KCBannerViewDatasource>)datasource
 {
     _datasource = datasource;
     
     [self reloadData];
-    
 }
 
 - (void)setScrollDirection:(KCBannerViewScrollDirection)scrollDirection
@@ -256,7 +320,7 @@ static const NSInteger KCMaxSection = 100;
         _pageControl.hidesForSinglePage = YES;
         _pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
         _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
-        
+        _pageControl.userInteractionEnabled = NO;
         
     }
     return _pageControl;
@@ -265,7 +329,6 @@ static const NSInteger KCMaxSection = 100;
 - (UICollectionView *)collectionView
 {
     if (!_collectionView) {
-        
         
         KCBannerViewLayout *layout = [[KCBannerViewLayout alloc] init];
         layout.scrollDirection = (UICollectionViewScrollDirection)self.scrollDirection;
@@ -279,8 +342,6 @@ static const NSInteger KCMaxSection = 100;
         _collectionView.pagingEnabled = YES;
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
-        
-        
         
     }
     return _collectionView;

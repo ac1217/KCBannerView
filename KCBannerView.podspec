@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "KCBannerView"
-  s.version      = "0.0.7"
+  s.version      = "0.0.8"
   s.summary      = "一个图片循环轮播的框架"
 
   # This description is used to generate tags and improve search results.
@@ -82,7 +82,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/ac1217/KCBannerView.git", :tag => "0.0.7" }
+  s.source       = { :git => "https://github.com/ac1217/KCBannerView.git", :tag => "0.0.8" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
