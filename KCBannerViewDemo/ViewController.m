@@ -75,8 +75,6 @@
     // 添加
     [self.sv addSubview:bannerView];
     
-    bannerView.scrollDirection = KCBannerViewScrollDirectionVertical;
-    
     self.bannerView = bannerView;
     
     
@@ -110,16 +108,5 @@
     return self.banners.count;
 }
 
-#pragma mark scrollViewDelegate
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    self.bannerView.repeat = NO;
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    self.bannerView.repeat = YES;
-}
 
 @end

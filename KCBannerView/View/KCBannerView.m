@@ -71,7 +71,7 @@ static const NSInteger KCMaxSection = 100;
     self.timer = [NSTimer kc_timerWithTimeInterval:self.timeInterval block:^(NSTimer *timer) {
         [weakSelf nextPage];
     } repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+    [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:self.scrollView ? NSDefaultRunLoopMode : NSRunLoopCommonModes];
 }
 
 - (void)removeTimer
