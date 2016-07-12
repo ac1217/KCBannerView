@@ -66,7 +66,7 @@
     [self.view addSubview:self.sv];
     
     // 创建
-    KCBannerView *bannerView = [[KCBannerView alloc] initWithScrollView:self.sv];
+    KCBannerView *bannerView = [[KCBannerView alloc] init];
     
     // 设置代理
     bannerView.delegate = self;
@@ -106,6 +106,21 @@
 - (NSInteger)numberOfBannersInBannerView:(KCBannerView *)bannerView
 {
     return self.banners.count;
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    self.bannerView.repeat = NO;
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    self.bannerView.repeat = YES;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    self.bannerView.contentOffset = scrollView.contentOffset;
 }
 
 

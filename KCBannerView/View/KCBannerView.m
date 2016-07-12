@@ -40,10 +40,7 @@ static const NSInteger KCMaxSection = 100;
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 
-
 @property (nonatomic, strong) NSTimer *timer;
-
-@property (nonatomic, weak) UIScrollView *scrollView;
 
 @property (nonatomic, assign) CGRect changeFrame;
 
@@ -55,8 +52,6 @@ static const NSInteger KCMaxSection = 100;
 - (void)dealloc
 {
     [self removeTimer];
-    
-    [self.scrollView removeObserver:self forKeyPath:@"contentOffset"];
 }
 
 #pragma mark -内部方法
@@ -71,7 +66,7 @@ static const NSInteger KCMaxSection = 100;
     self.timer = [NSTimer kc_timerWithTimeInterval:self.timeInterval block:^(NSTimer *timer) {
         [weakSelf nextPage];
     } repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:self.scrollView ? NSDefaultRunLoopMode : NSRunLoopCommonModes];
+    [[NSRunLoop mainRunLoop] addTimer:self.timer forMode: NSRunLoopCommonModes];
 }
 
 - (void)removeTimer
@@ -121,46 +116,6 @@ static const NSInteger KCMaxSection = 100;
 }
 
 #pragma mark -初始化
-
-- (instancetype)initWithScrollView:(UIScrollView *)scrollView
-{
-    if (self = [super init]) {
-        
-        [scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
-        self.scrollView = scrollView;
-        
-        [self setup];
-    }
-    return self;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
-{
-    CGFloat offsetY = [change[NSKeyValueChangeNewKey] CGPointValue].y;
-    
-    if (offsetY >= 0)
-    {
-        
-        CGRect frame = self.changeFrame;
-        frame.origin.y = 0;
-        self.changeFrame = frame;
-        self.collectionView.clipsToBounds = YES;
-        
-    }else {
-        
-        CGFloat delta = 0.0f;
-        CGRect rect = self.bounds;
-        delta = fabs(MIN(0.0f, offsetY));
-        rect.origin.y -= delta;
-        rect.size.height += delta;
-        self.changeFrame = rect;
-        self.collectionView.clipsToBounds = NO;
-        
-    }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:KCBannerViewContentOffsetDicChangeNotification object:nil userInfo:@{KCBannerViewDicChangeFrameKey : [NSValue valueWithCGRect:self.changeFrame]}];
-    
-}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -268,6 +223,37 @@ static const NSInteger KCMaxSection = 100;
 }
 
 #pragma mark -公共方法
+
+- (void)setContentOffset:(CGPoint)contentOffset
+{
+    _contentOffset = contentOffset;
+    
+    CGFloat offsetY = contentOffset.y;
+    
+    if (offsetY >= 0)
+    {
+        
+        CGRect frame = self.changeFrame;
+        frame.origin.y = 0;
+        self.changeFrame = frame;
+        self.collectionView.clipsToBounds = YES;
+        
+    }else {
+        
+        CGFloat delta = 0.0f;
+        CGRect rect = self.bounds;
+        delta = fabs(MIN(0.0f, offsetY));
+        rect.origin.y -= delta;
+        rect.size.height += delta;
+        self.changeFrame = rect;
+        self.collectionView.clipsToBounds = NO;
+        
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:KCBannerViewContentOffsetDicChangeNotification object:nil userInfo:@{KCBannerViewDicChangeFrameKey : [NSValue valueWithCGRect:self.changeFrame]}];
+
+}
+
 - (void)reloadData
 {
     [self.collectionView reloadData];

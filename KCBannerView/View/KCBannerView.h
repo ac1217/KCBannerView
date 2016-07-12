@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 @interface KCBannerView : UIView
 
 // 若需要下拉缩放效果，请使用此初始化方法
-- (instancetype)initWithScrollView:(UIScrollView *)scrollView;
+//- (instancetype)initWithScrollView:(UIScrollView *)scrollView;
 
 // 页数控件
 @property (nonatomic, strong, readonly) UIPageControl *pageControl;
@@ -61,6 +61,9 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 
 // 刷新数据
 - (void)reloadData;
+
+// 偏移量
+@property (nonatomic, assign) CGPoint contentOffset;
 
 
 @end
