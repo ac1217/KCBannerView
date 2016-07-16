@@ -14,6 +14,7 @@
 {
     [super prepareLayout];
     
+    if (CGSizeEqualToSize(self.collectionView.bounds.size, CGSizeZero)) return;
     self.itemSize = self.collectionView.bounds.size;
     self.minimumLineSpacing = 0;
     self.minimumInteritemSpacing = 0;

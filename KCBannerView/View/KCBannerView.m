@@ -192,6 +192,8 @@ static const NSInteger KCMaxSection = 100;
     }
 }
 
+
+
 #pragma mark scrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -258,9 +260,31 @@ static const NSInteger KCMaxSection = 100;
 {
     [self.collectionView reloadData];
     
-    self.pageControl.numberOfPages = [self.datasource numberOfBannersInBannerView:self];
+    NSInteger count = [self.datasource numberOfBannersInBannerView:self];
+    self.pageControl.numberOfPages = count;
     
     [self addTimer];
+    
+    // contentSize不为0
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    
+        if (count > 1) {
+            
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:KCMaxSection * 0.5];
+            
+            if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
+                
+                
+                [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+                
+            }else {
+                
+                [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+            }
+            
+        }
+        
+    });
     
 }
 
