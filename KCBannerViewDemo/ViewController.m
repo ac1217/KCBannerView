@@ -80,6 +80,11 @@
     
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self.bannerView reloadData];
+}
+
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
@@ -95,6 +100,8 @@
 - (void)bannerView:(KCBannerView *)bannerView didSelectBannerAtIndex:(NSInteger)index
 {
     NSLog(@"%ld", index);
+    
+    [bannerView reloadData];
 }
 
 #pragma mark -KCBannerViewDatasource

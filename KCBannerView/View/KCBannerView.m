@@ -270,7 +270,7 @@ static const NSInteger KCMaxSection = 100;
     
         if (count > 1) {
             
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:KCMaxSection * 0.5];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.pageControl.currentPage inSection:KCMaxSection * 0.5];
             
             if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
                 
