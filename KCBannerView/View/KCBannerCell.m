@@ -8,7 +8,8 @@
 
 #import "KCBannerCell.h"
 #import "KCBanner.h"
-#import "YYWebImage.h"
+#import "UIImageView+WebCache.h"
+
 
 extern NSString *const KCBannerViewContentOffsetDicChangeNotification;
 extern NSString *const KCBannerViewDicChangeFrameKey;
@@ -88,8 +89,7 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
         
         if ([banner picUrl]) {
             
-            [self.imageView yy_setImageWithURL:[banner picUrl]
-                                       options:YYWebImageOptionProgressiveBlur | YYWebImageOptionSetImageWithFadeAnimation];
+            [self.imageView sd_setImageWithURL:[banner picUrl]];
         }
         
     }
