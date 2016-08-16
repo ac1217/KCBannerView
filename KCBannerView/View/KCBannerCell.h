@@ -18,6 +18,7 @@ extern NSString *const KCBannerCellReuseID;
 - (UIImage *)pic;
 - (NSString *)title;
 
+- (UIImage *)placeholderPic;
 @end
 
 @interface KCBannerCell : UICollectionViewCell

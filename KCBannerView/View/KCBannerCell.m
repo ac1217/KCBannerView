@@ -89,7 +89,13 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
         
         if ([banner picUrl]) {
             
-            [self.imageView sd_setImageWithURL:[banner picUrl]];
+            UIImage *placeholder = nil;
+            
+            if ([banner respondsToSelector:@selector(placeholderPic)]) {
+                placeholder = [banner placeholderPic];
+            }
+            
+            [self.imageView sd_setImageWithURL:[banner picUrl] placeholderImage:placeholder];
         }
         
     }

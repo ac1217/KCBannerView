@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) NSURL *picUrl;
 @property (nonatomic, strong) UIImage *pic;
+@property (nonatomic, strong) UIImage *placeholderPic;
 
 // 标题
 @property (nonatomic, copy) NSString *title;

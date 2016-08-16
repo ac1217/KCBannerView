@@ -38,19 +38,23 @@
         
         KCBanner *banner0 = [[KCBanner alloc] init];
         banner0.picUrl = [NSURL URLWithString:@"http://pic29.nipic.com/20130530/6434097_113007064309_2.jpg"];
+        banner0.placeholderPic = [UIImage imageNamed:@"pic_default_icon"];
         
         KCBanner *banner1 = [[KCBanner alloc] init];
         banner1.picUrl = [NSURL URLWithString:@"http://pic50.nipic.com/file/20141010/19650248_153632125000_2.jpg"];
         banner1.title = @"sdfdsfsfsadfasdfasdfasdfsasfsdfds";
+        banner1.placeholderPic = [UIImage imageNamed:@"pic_default_icon"];
 //
 //        
         KCBanner *banner2 = [[KCBanner alloc] init];
         banner2.picUrl = [NSURL URLWithString:@"http://pic29.nipic.com/20130530/6434097_113007064309_2.jpg"];
+        banner2.placeholderPic = [UIImage imageNamed:@"pic_default_icon"];
         
         
         KCBanner *banner3 = [[KCBanner alloc] init];
         banner3.picUrl = [NSURL URLWithString:@"http://pic50.nipic.com/file/20141010/19650248_153632125000_2.jpg"];
         banner3.title = @"sdfdsfsfsfssadfsafsafdfds";
+        banner3.placeholderPic = [UIImage imageNamed:@"pic_default_icon"];
         
         _banners = @[banner0, banner1, banner2, banner3];
 //        _banners = @[banner0];
@@ -68,6 +72,7 @@
     // 创建
     KCBannerView *bannerView = [[KCBannerView alloc] init];
     
+    bannerView.placeholderImageView.image = [UIImage imageNamed:@"pic"];
     // 设置代理
     bannerView.delegate = self;
     // 数据源
@@ -99,7 +104,6 @@
 #pragma mark -KCBannerViewDelegate
 - (void)bannerView:(KCBannerView *)bannerView didSelectBannerAtIndex:(NSInteger)index
 {
-    NSLog(@"%ld", index);
     
     [bannerView reloadData];
 }

@@ -36,7 +36,9 @@ static const NSInteger KCMaxSection = 100;
 @interface KCBannerView () <UICollectionViewDataSource, UICollectionViewDelegate>{
     UIPageControl *_pageControl;
     BOOL _repeat;
+    UIImageView *_placeholderImageView;
 }
+
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 
@@ -139,6 +141,7 @@ static const NSInteger KCMaxSection = 100;
     _repeat = YES;
     _scrollDirection = KCBannerViewScrollDirectionHorizontal;
     
+    [self addSubview:self.placeholderImageView];
     [self addSubview:self.collectionView];
     [self addSubview:self.pageControl];
 }
@@ -160,6 +163,8 @@ static const NSInteger KCMaxSection = 100;
     
     self.changeFrame = self.bounds;
     
+    self.placeholderImageView.frame = self.bounds;
+    
 }
 
 
@@ -167,7 +172,13 @@ static const NSInteger KCMaxSection = 100;
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [self.datasource numberOfBannersInBannerView:self];
+    
+    NSInteger count = [self.datasource numberOfBannersInBannerView:self];
+
+    
+    self.placeholderImageView.hidden = count != 0;
+    
+    return count;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -265,26 +276,27 @@ static const NSInteger KCMaxSection = 100;
     
     [self addTimer];
     
-    // contentSize不为0
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    
-        if (count > 1) {
-            
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.pageControl.currentPage inSection:KCMaxSection * 0.5];
-            
-            if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
-                
-                
-                [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
-                
-            }else {
-                
-                [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
-            }
-            
-        }
+    if (count > 1 && self.pageControl.currentPage < count) {
+        // contentSize不为0
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-    });
+                
+                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.pageControl.currentPage inSection:KCMaxSection * 0.5];
+                
+                if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
+                    
+                    
+                    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+                    
+                }else {
+                    
+                    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+                }
+                
+            
+            
+        });
+    }
     
 }
 
@@ -346,7 +358,7 @@ static const NSInteger KCMaxSection = 100;
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         
         [_collectionView registerClass:[KCBannerCell class] forCellWithReuseIdentifier:KCBannerCellReuseID];
-        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.backgroundColor = [UIColor clearColor];
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;
         _collectionView.pagingEnabled = YES;
@@ -355,6 +367,16 @@ static const NSInteger KCMaxSection = 100;
         
     }
     return _collectionView;
+}
+
+- (UIImageView *)placeholderImageView
+{
+    if (!_placeholderImageView) {
+        _placeholderImageView = [UIImageView new];
+        _placeholderImageView.contentMode = UIViewContentModeCenter;
+        _placeholderImageView.clipsToBounds = YES;
+    }
+    return _placeholderImageView;
 }
 
 
