@@ -70,50 +70,28 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
     self.titleLabel.frame = CGRectMake(0, 0, self.contentView.frame.size.width, 30);
 }
 
-- (void)setBanner:(id<KCBannerProtocol>)banner
+- (void)setBanner:(KCBanner *)banner
 {
     _banner = banner;
     
-    if ([banner respondsToSelector:@selector(pic)]) {
+    if ([banner image]) {
+        
+        self.imageView.image = [banner image];
+    }else if ([banner url]) {
         
         
-        if ([banner pic]) {
-            
-            self.imageView.image = [banner pic];
-        }
         
-        
+        [self.imageView sd_setImageWithURL:[banner url] placeholderImage:banner.placeholderImage];
     }
+
     
-    if ([banner respondsToSelector:@selector(picUrl)]) {
-        
-        if ([banner picUrl]) {
-            
-            UIImage *placeholder = nil;
-            
-            if ([banner respondsToSelector:@selector(placeholderPic)]) {
-                placeholder = [banner placeholderPic];
-            }
-            
-            [self.imageView sd_setImageWithURL:[banner picUrl] placeholderImage:placeholder];
-        }
-        
-    }
-    
-    if ([banner respondsToSelector:@selector(title)]) {
-        
-        if ([banner title].length) {
-            self.titleLabel.hidden = NO;
-            self.titleLabel.text = [banner title];
-        }else {
-            
-            self.titleLabel.hidden = YES;
-        }
-        
+    if ([banner title].length) {
+        self.titleLabel.hidden = NO;
+        self.titleLabel.text = [banner title];
     }else {
+        
         self.titleLabel.hidden = YES;
     }
-    
     
     
 }

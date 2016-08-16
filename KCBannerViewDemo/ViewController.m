@@ -37,24 +37,21 @@
     if (!_banners) {
         
         KCBanner *banner0 = [[KCBanner alloc] init];
-        banner0.picUrl = [NSURL URLWithString:@"http://pic29.nipic.com/20130530/6434097_113007064309_2.jpg"];
-        banner0.placeholderPic = [UIImage imageNamed:@"pic_default_icon"];
+        banner0.url = [NSURL URLWithString:@"http://pic29.nipic.com/20130530/6434097_113007064309_2.jpg"];
         
         KCBanner *banner1 = [[KCBanner alloc] init];
-        banner1.picUrl = [NSURL URLWithString:@"http://pic50.nipic.com/file/20141010/19650248_153632125000_2.jpg"];
+        banner1.url = [NSURL URLWithString:@"http://pic50.nipic.com/file/20141010/19650248_153632125000_2.jpg"];
         banner1.title = @"sdfdsfsfsadfasdfasdfasdfsasfsdfds";
-        banner1.placeholderPic = [UIImage imageNamed:@"pic_default_icon"];
 //
 //        
         KCBanner *banner2 = [[KCBanner alloc] init];
-        banner2.picUrl = [NSURL URLWithString:@"http://pic29.nipic.com/20130530/6434097_113007064309_2.jpg"];
-        banner2.placeholderPic = [UIImage imageNamed:@"pic_default_icon"];
+        banner2.url = [NSURL URLWithString:@"http://pic29.nipic.com/20130530/6434097_113007064309_2.jpg"];
         
         
         KCBanner *banner3 = [[KCBanner alloc] init];
-        banner3.picUrl = [NSURL URLWithString:@"http://pic50.nipic.com/file/20141010/19650248_153632125000_2.jpg"];
+        banner3.url = [NSURL URLWithString:@"http://pic50.nipic.com/file/20141010/19650248_153632125000_2.jpg"];
         banner3.title = @"sdfdsfsfsfssadfsafsafdfds";
-        banner3.placeholderPic = [UIImage imageNamed:@"pic_default_icon"];
+        banner3.placeholderImage = [UIImage imageNamed:@"pic_default_icon"];
         
         _banners = @[banner0, banner1, banner2, banner3];
 //        _banners = @[banner0];
@@ -109,7 +106,7 @@
 }
 
 #pragma mark -KCBannerViewDatasource
-- (id<KCBannerProtocol>)bannerView:(KCBannerView *)bannerView bannerForItemAtIndex:(NSInteger)index
+- (KCBanner *)bannerView:(KCBannerView *)bannerView bannerForItemAtIndex:(NSInteger)index
 {
     return self.banners[index];
 }

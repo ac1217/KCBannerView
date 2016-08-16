@@ -10,9 +10,9 @@
 
 @interface KCBanner : NSObject
 
-@property (nonatomic, strong) NSURL *picUrl;
-@property (nonatomic, strong) UIImage *pic;
-@property (nonatomic, strong) UIImage *placeholderPic;
+@property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) UIImage *placeholderImage;
 
 // 标题
 @property (nonatomic, copy) NSString *title;

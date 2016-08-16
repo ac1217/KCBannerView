@@ -17,14 +17,12 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 @class KCBannerView;
 
 // banner数据需要提供协议的接口
-@protocol KCBannerProtocol;
-
 // 数据源
 @protocol KCBannerViewDatasource <NSObject>
 
 - (NSInteger)numberOfBannersInBannerView:(KCBannerView *)bannerView;
 
-- (id<KCBannerProtocol>)bannerView:(KCBannerView *)bannerView bannerForItemAtIndex:(NSInteger)index;
+- (KCBanner *)bannerView:(KCBannerView *)bannerView bannerForItemAtIndex:(NSInteger)index;
 
 @end
 
