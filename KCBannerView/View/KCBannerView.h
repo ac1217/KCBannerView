@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 
 // banner数据需要提供协议的接口
 // 数据源
-@protocol KCBannerViewDatasource <NSObject>
+@protocol KCBannerViewDataSource <NSObject>
 
 - (NSInteger)numberOfBannersInBannerView:(KCBannerView *)bannerView;
 
@@ -37,8 +37,6 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 
 @interface KCBannerView : UIView
 
-// 若需要下拉缩放效果，请使用此初始化方法
-//- (instancetype)initWithScrollView:(UIScrollView *)scrollView;
 
 // 页数控件
 @property (nonatomic, strong, readonly) UIPageControl *pageControl;
@@ -50,7 +48,7 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 @property (nonatomic, weak) id<KCBannerViewDelegate> delegate;
 
 // 数据源
-@property (nonatomic, weak) id<KCBannerViewDatasource> datasource;
+@property (nonatomic, weak) id<KCBannerViewDataSource> dataSource;
 
 // 循环间隔
 @property (nonatomic, assign) CGFloat timeInterval;

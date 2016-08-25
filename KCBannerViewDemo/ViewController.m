@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "KCBannerView.h"
 #import "KCBanner.h"
-@interface ViewController ()<KCBannerViewDelegate,KCBannerViewDatasource, UIScrollViewDelegate>
+@interface ViewController ()<KCBannerViewDelegate,KCBannerViewDataSource, UIScrollViewDelegate>
 
 @property (nonatomic, strong) NSArray *banners;
 
@@ -73,7 +73,7 @@
     // 设置代理
     bannerView.delegate = self;
     // 数据源
-    bannerView.datasource = self;
+    bannerView.dataSource = self;
     // 添加
     [self.sv addSubview:bannerView];
     

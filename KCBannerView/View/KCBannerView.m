@@ -84,7 +84,7 @@ static const NSInteger KCMaxSection = 100;
     NSInteger item = resetIndexPath.item + 1;
     NSInteger section = resetIndexPath.section;
     
-    if (item == [self.datasource numberOfBannersInBannerView:self]) {
+    if (item == [self.dataSource numberOfBannersInBannerView:self]) {
         item = 0;
         section++;
     }
@@ -168,12 +168,12 @@ static const NSInteger KCMaxSection = 100;
 }
 
 
-#pragma mark -UICollectionViewDataSource
+#pragma mark -UICollectionViewdataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     
-    NSInteger count = [self.datasource numberOfBannersInBannerView:self];
+    NSInteger count = [self.dataSource numberOfBannersInBannerView:self];
 
     
     self.placeholderImageView.hidden = count != 0;
@@ -183,14 +183,14 @@ static const NSInteger KCMaxSection = 100;
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return [self.datasource numberOfBannersInBannerView:self] <= 1 ? 1 : KCMaxSection;
+    return [self.dataSource numberOfBannersInBannerView:self] <= 1 ? 1 : KCMaxSection;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     KCBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:KCBannerCellReuseID forIndexPath:indexPath];
     
-    cell.banner = [self.datasource bannerView:self bannerForItemAtIndex:indexPath.row];
+    cell.banner = [self.dataSource bannerView:self bannerForItemAtIndex:indexPath.row];
     
     return cell;
 }
@@ -220,7 +220,7 @@ static const NSInteger KCMaxSection = 100;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSInteger count = [self.datasource numberOfBannersInBannerView:self];
+    NSInteger count = [self.dataSource numberOfBannersInBannerView:self];
     if (count == 0) return;
     
     NSInteger currentPage = 0;
@@ -271,7 +271,7 @@ static const NSInteger KCMaxSection = 100;
 {
     [self.collectionView reloadData];
     
-    NSInteger count = [self.datasource numberOfBannersInBannerView:self];
+    NSInteger count = [self.dataSource numberOfBannersInBannerView:self];
     self.pageControl.numberOfPages = count;
     
     [self addTimer];
@@ -302,7 +302,7 @@ static const NSInteger KCMaxSection = 100;
 
 - (BOOL)isRepeat
 {
-    return [self.datasource numberOfBannersInBannerView:self] <= 1 ? NO : _repeat;
+    return [self.dataSource numberOfBannersInBannerView:self] <= 1 ? NO : _repeat;
 }
 
 - (void)setRepeat:(BOOL)repeat
@@ -317,9 +317,9 @@ static const NSInteger KCMaxSection = 100;
     
 }
 
-- (void)setDatasource:(id<KCBannerViewDatasource>)datasource
+- (void)setdataSource:(id<KCBannerViewDataSource>)dataSource
 {
-    _datasource = datasource;
+    _dataSource = dataSource;
     
     [self reloadData];
 }
