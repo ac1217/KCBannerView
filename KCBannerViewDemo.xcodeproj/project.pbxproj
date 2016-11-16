@@ -64,6 +64,7 @@
 		07E4D83D1C6B4719000A29EF /* KCBannerViewDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KCBannerViewDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		07E4D8411C6B4719000A29EF /* KCBannerViewDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCBannerViewDemoUITests.m; sourceTree = "<group>"; };
 		07E4D8431C6B4719000A29EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07E6522A1DDBF22D0025D09E /* KCBannerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCBannerProtocol.h; sourceTree = "<group>"; };
 		3D04749A6EF6D2FDC0B353A6 /* Pods-KCBannerViewDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KCBannerViewDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-KCBannerViewDemo/Pods-KCBannerViewDemo.release.xcconfig"; sourceTree = "<group>"; };
 		4A44CA6CF0FC1FC9B358ECB9 /* Pods_KCBannerViewDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KCBannerViewDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7C70289C87B44D5F3346ADB /* Pods-KCBannerViewDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KCBannerViewDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KCBannerViewDemo/Pods-KCBannerViewDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -122,6 +123,7 @@
 				07930DEB1D182C2900AC2C8D /* KCBannerCell.m */,
 				07930DEC1D182C2900AC2C8D /* KCBannerView.h */,
 				07930DED1D182C2900AC2C8D /* KCBannerView.m */,
+				07E6522A1DDBF22D0025D09E /* KCBannerProtocol.h */,
 			);
 			path = View;
 			sourceTree = "<group>";

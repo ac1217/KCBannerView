@@ -69,15 +69,19 @@
     // 创建
     KCBannerView *bannerView = [[KCBannerView alloc] init];
     
-    bannerView.placeholderImageView.image = [UIImage imageNamed:@"pic"];
+    bannerView.backgroundImageView.image = [UIImage imageNamed:@"pic"];
     // 设置代理
     bannerView.delegate = self;
     // 数据源
     bannerView.dataSource = self;
+    
+    bannerView.pageControlPosition = KCBannerViewPageControlPositionRight;
+    bannerView.descPosition = KCBannerViewDescPositionBottom;
     // 添加
     [self.sv addSubview:bannerView];
     
     self.bannerView = bannerView;
+    
     
     
 }
@@ -106,13 +110,15 @@
 }
 
 #pragma mark -KCBannerViewDatasource
-- (KCBanner *)bannerView:(KCBannerView *)bannerView bannerForItemAtIndex:(NSInteger)index
+- (id<KCBannerProtocol> )bannerView:(KCBannerView *)bannerView bannerForItemAtIndex:(NSInteger)index
 {
+    
     return self.banners[index];
 }
 
 - (NSInteger)numberOfBannersInBannerView:(KCBannerView *)bannerView
 {
+    
     return self.banners.count;
 }
 
@@ -123,6 +129,7 @@
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    
     self.bannerView.repeat = YES;
 }
 

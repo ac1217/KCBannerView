@@ -8,10 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import "KCBanner.h"
+#import "KCBannerProtocol.h"
 
 typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
     KCBannerViewScrollDirectionVertical,
     KCBannerViewScrollDirectionHorizontal
+};
+
+typedef NS_ENUM(NSInteger, KCBannerViewPageControlPosition) {
+    KCBannerViewPageControlPositionCenter = 0,
+    KCBannerViewPageControlPositionLeft,
+    KCBannerViewPageControlPositionRight,
+};
+
+typedef NS_ENUM(NSInteger, KCBannerViewDescPosition) {
+    KCBannerViewDescPositionTop = 0,
+    KCBannerViewDescPositionBottom
 };
 
 @class KCBannerView;
@@ -22,7 +34,7 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 
 - (NSInteger)numberOfBannersInBannerView:(KCBannerView *)bannerView;
 
-- (KCBanner *)bannerView:(KCBannerView *)bannerView bannerForItemAtIndex:(NSInteger)index;
+- (id <KCBannerProtocol>)bannerView:(KCBannerView *)bannerView bannerForItemAtIndex:(NSInteger)index;
 
 @end
 
@@ -42,7 +54,7 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 @property (nonatomic, strong, readonly) UIPageControl *pageControl;
 
 // 占位图
-@property (nonatomic, strong, readonly) UIImageView *placeholderImageView;
+@property (nonatomic, strong, readonly) UIImageView *backgroundImageView;
 
 // 代理
 @property (nonatomic, weak) id<KCBannerViewDelegate> delegate;
@@ -57,6 +69,10 @@ typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
 @property (nonatomic, assign, getter=isRepeat) BOOL repeat;
 
 @property (nonatomic, assign) KCBannerViewScrollDirection scrollDirection;
+@property (nonatomic, assign) KCBannerViewPageControlPosition pageControlPosition;
+@property (nonatomic, assign) KCBannerViewDescPosition descPosition;
+
+
 
 // 刷新数据
 - (void)reloadData;

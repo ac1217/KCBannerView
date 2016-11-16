@@ -31,12 +31,12 @@ NSString *const KCBannerViewDicChangeFrameKey = @"KCBannerViewDicChangeFrameKey"
 @end
 
 
-static const NSInteger KCMaxSection = 100;
+static const NSInteger KCMaxSectionCount = 10000;
 
 @interface KCBannerView () <UICollectionViewDataSource, UICollectionViewDelegate>{
     UIPageControl *_pageControl;
     BOOL _repeat;
-    UIImageView *_placeholderImageView;
+    UIImageView *_backgroundImageView;
 }
 
 
@@ -79,42 +79,21 @@ static const NSInteger KCMaxSection = 100;
 
 - (void)nextPage
 {
-    NSIndexPath *resetIndexPath = [self resetIndexPath];
+    NSIndexPath *indexPath = self.collectionView.indexPathsForVisibleItems.lastObject;
     
-    NSInteger item = resetIndexPath.item + 1;
-    NSInteger section = resetIndexPath.section;
+    NSInteger count = self.pageControl.numberOfPages;
     
-    if (item == [self.dataSource numberOfBannersInBannerView:self]) {
-        item = 0;
-        section++;
-    }
+    NSInteger item = KCMaxSectionCount * count / 2 + indexPath.item % count;
     
-    if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
-        
-        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
-    }else {
-        
-        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
-    }
+    NSIndexPath *currentIndexPath = [NSIndexPath indexPathForItem:item inSection:0];
+    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:item + 1 inSection:0];
     
-}
-
-- (NSIndexPath *)resetIndexPath
-{
-    NSIndexPath *visibleIndexPath = [[self.collectionView indexPathsForVisibleItems] lastObject];
+    UICollectionViewScrollPosition scrollPosition = self.scrollDirection == KCBannerViewScrollDirectionHorizontal ? UICollectionViewScrollPositionCenteredHorizontally : UICollectionViewScrollPositionCenteredVertically;
     
-    NSIndexPath *resetIndexPath = [NSIndexPath indexPathForItem:visibleIndexPath.item inSection:KCMaxSection / 2];
+    [self.collectionView scrollToItemAtIndexPath:currentIndexPath atScrollPosition:scrollPosition animated:NO];
     
-    if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
-        
-        [self.collectionView scrollToItemAtIndexPath:resetIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-    }else {
-        
-        [self.collectionView scrollToItemAtIndexPath:resetIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
-    }
+    [self.collectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:scrollPosition animated:YES];
     
-    
-    return resetIndexPath;
 }
 
 #pragma mark -初始化
@@ -141,7 +120,7 @@ static const NSInteger KCMaxSection = 100;
     _repeat = YES;
     _scrollDirection = KCBannerViewScrollDirectionHorizontal;
     
-    [self addSubview:self.placeholderImageView];
+    [self addSubview:self.backgroundImageView];
     [self addSubview:self.collectionView];
     [self addSubview:self.pageControl];
 }
@@ -150,20 +129,35 @@ static const NSInteger KCMaxSection = 100;
 {
     [super layoutSubviews];
     
-    CGFloat pageWH = 15;
-    CGFloat pageControlH = pageWH;
-    CGFloat pageControlW = pageWH * self.pageControl.numberOfPages;
+    CGFloat margin = 15;
     
-    CGFloat pageControlX = (self.frame.size.width - pageControlW) * 0.5;
-    CGFloat pageControlY = self.frame.size.height - pageControlH;
+    CGSize pageControlSize = [self.pageControl sizeForNumberOfPages:self.pageControl.numberOfPages];
+    pageControlSize.height -= margin;
     
-    self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlW, pageControlH);
+    
+    CGFloat pageControlX = 0;
+    CGFloat pageControlY = self.frame.size.height - pageControlSize.height;
+  
+    if (self.pageControlPosition == KCBannerViewPageControlPositionRight) {
+        
+        pageControlX = self.frame.size.width - margin - pageControlSize.width;
+        
+    }else if (self.pageControlPosition == KCBannerViewPageControlPositionLeft){
+        
+        pageControlX = margin;
+        
+    }else {
+        
+        pageControlX = (self.frame.size.width - pageControlSize.width) * 0.5;
+    }
+    
+    self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlSize.width, pageControlSize.height);
     
     self.collectionView.frame = self.bounds;
     
     self.changeFrame = self.bounds;
     
-    self.placeholderImageView.frame = self.bounds;
+    self.backgroundImageView.frame = self.bounds;
     
 }
 
@@ -173,24 +167,22 @@ static const NSInteger KCMaxSection = 100;
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     
-    NSInteger count = [self.dataSource numberOfBannersInBannerView:self];
+    NSInteger count = self.pageControl.numberOfPages;
 
+    self.backgroundImageView.hidden = count != 0;
     
-    self.placeholderImageView.hidden = count != 0;
+    return count > 1 ? count * KCMaxSectionCount : count;
     
-    return count;
 }
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return [self.dataSource numberOfBannersInBannerView:self] <= 1 ? 1 : KCMaxSection;
-}
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     KCBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:KCBannerCellReuseID forIndexPath:indexPath];
     
-    cell.banner = [self.dataSource bannerView:self bannerForItemAtIndex:indexPath.row];
+    cell.banner = [self.dataSource bannerView:self bannerForItemAtIndex:(indexPath.row % self.pageControl.numberOfPages)];
+    
+    cell.descPosition = (KCBannerCellDescPosition)self.descPosition;
     
     return cell;
 }
@@ -199,7 +191,7 @@ static const NSInteger KCMaxSection = 100;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([self.delegate respondsToSelector:@selector(bannerView:didSelectBannerAtIndex:)]) {
-        [self.delegate bannerView:self didSelectBannerAtIndex:indexPath.row];
+        [self.delegate bannerView:self didSelectBannerAtIndex:(indexPath.row % self.pageControl.numberOfPages)];
     }
 }
 
@@ -269,19 +261,20 @@ static const NSInteger KCMaxSection = 100;
 
 - (void)reloadData
 {
+    
+    self.pageControl.numberOfPages = [self.dataSource numberOfBannersInBannerView:self];
+    
     [self.collectionView reloadData];
     
-    NSInteger count = [self.dataSource numberOfBannersInBannerView:self];
-    self.pageControl.numberOfPages = count;
     
     [self addTimer];
     
-    if (count > 1 && self.pageControl.currentPage < count) {
+    if (self.pageControl.numberOfPages > 1 && self.pageControl.currentPage < self.pageControl.numberOfPages) {
         // contentSize不为0
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
                 
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.pageControl.currentPage inSection:KCMaxSection * 0.5];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:KCMaxSectionCount * self.pageControl.numberOfPages / 2 inSection:0];
                 
                 if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
                     
@@ -302,7 +295,8 @@ static const NSInteger KCMaxSection = 100;
 
 - (BOOL)isRepeat
 {
-    return [self.dataSource numberOfBannersInBannerView:self] <= 1 ? NO : _repeat;
+    
+    return self.pageControl.numberOfPages <= 1 ? NO : _repeat;
 }
 
 - (void)setRepeat:(BOOL)repeat
@@ -317,11 +311,12 @@ static const NSInteger KCMaxSection = 100;
     
 }
 
-- (void)setdataSource:(id<KCBannerViewDataSource>)dataSource
+- (void)setDataSource:(id<KCBannerViewDataSource>)dataSource
 {
     _dataSource = dataSource;
     
     [self reloadData];
+    
 }
 
 - (void)setScrollDirection:(KCBannerViewScrollDirection)scrollDirection
@@ -343,7 +338,6 @@ static const NSInteger KCMaxSection = 100;
         _pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
         _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
         _pageControl.userInteractionEnabled = NO;
-        
     }
     return _pageControl;
 }
@@ -369,14 +363,14 @@ static const NSInteger KCMaxSection = 100;
     return _collectionView;
 }
 
-- (UIImageView *)placeholderImageView
+- (UIImageView *)backgroundImageView
 {
-    if (!_placeholderImageView) {
-        _placeholderImageView = [UIImageView new];
-        _placeholderImageView.contentMode = UIViewContentModeCenter;
-        _placeholderImageView.clipsToBounds = YES;
+    if (!_backgroundImageView) {
+        _backgroundImageView = [UIImageView new];
+        _backgroundImageView.contentMode = UIViewContentModeCenter;
+        _backgroundImageView.clipsToBounds = YES;
     }
-    return _placeholderImageView;
+    return _backgroundImageView;
 }
 
 

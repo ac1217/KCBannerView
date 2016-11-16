@@ -67,27 +67,70 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
     
     self.imageView.frame = self.bounds;
     
-    self.titleLabel.frame = CGRectMake(0, 0, self.contentView.frame.size.width, 30);
+    
+    CGFloat titleY = 0;
+    CGFloat titleH = 30;
+    
+    if (self.descPosition == KCBannerCellDescPositionBottom) {
+        titleY = self.contentView.frame.size.height - titleH;
+    }
+    
+    self.titleLabel.frame = CGRectMake(0, titleY, self.contentView.frame.size.width, titleH);
 }
 
-- (void)setBanner:(KCBanner *)banner
+- (void)setBanner:(id<KCBannerProtocol>)banner
 {
     _banner = banner;
     
-    if ([banner image]) {
-        
-        self.imageView.image = [banner image];
-    }else if ([banner url]) {
-        
-        
-        
-        [self.imageView sd_setImageWithURL:[banner url] placeholderImage:banner.placeholderImage];
-    }
-
+    UIImage *placeholderImage = nil;
     
-    if ([banner title].length) {
-        self.titleLabel.hidden = NO;
-        self.titleLabel.text = [banner title];
+    if ([banner respondsToSelector:@selector(placeholderImageResource)]) {
+        
+        if ([banner.placeholderImageResource isKindOfClass:[NSString class]]) {
+            placeholderImage = [UIImage imageNamed:banner.placeholderImageResource];
+        }else {
+            placeholderImage = banner.placeholderImageResource;
+        }
+        
+    }
+    
+    
+    if ([banner.imageResource isKindOfClass:[UIImage class]]) {
+        
+        self.imageView.image = banner.imageResource;
+        
+    }else if ([banner.imageResource isKindOfClass:[NSURL class]]) {
+        
+        [self.imageView sd_setImageWithURL:banner.imageResource placeholderImage:placeholderImage];
+        
+    }else if([banner.imageResource isKindOfClass:[NSString class]]) {
+        
+        if ([banner.imageResource hasPrefix:@"http"]) {
+            
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:banner.imageResource] placeholderImage:placeholderImage];
+        }else {
+            self.imageView.image = [UIImage imageNamed:banner.imageResource];
+        }
+        
+    }else {
+        self.imageView.image = nil;
+    }
+    
+    
+    if ([banner respondsToSelector:@selector(desc)]) {
+        
+        if (banner.desc.length) {
+            
+            self.titleLabel.hidden = NO;
+            
+            self.titleLabel.text = banner.desc;
+            
+        }else {
+            
+            self.titleLabel.hidden = YES;
+        }
+        
+        
     }else {
         
         self.titleLabel.hidden = YES;
