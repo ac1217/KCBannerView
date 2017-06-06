@@ -10,10 +10,6 @@
 #import "KCBanner.h"
 #import "KCBannerProtocol.h"
 
-typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
-    KCBannerViewScrollDirectionVertical = 0,
-    KCBannerViewScrollDirectionHorizontal
-};
 
 typedef NS_ENUM(NSInteger, KCBannerViewPageControlPosition) {
     KCBannerViewPageControlPositionCenter = 0,
@@ -70,7 +66,7 @@ typedef NS_ENUM(NSInteger, KCBannerViewDescPosition) {
 // 是否循环轮播，默认为YES，当数据个数少于等于1时此值为NO
 @property (nonatomic, assign, getter=isRepeat) BOOL repeat;
 
-@property (nonatomic, assign) KCBannerViewScrollDirection scrollDirection;
+@property (nonatomic, assign) UICollectionViewScrollDirection scrollDirection;
 @property (nonatomic, assign) KCBannerViewPageControlPosition pageControlPosition;
 @property (nonatomic, assign) KCBannerViewDescPosition descPosition;
 

@@ -90,7 +90,7 @@ static const NSInteger KCMaxSectionCount = 10000;
     NSIndexPath *currentIndexPath = [NSIndexPath indexPathForItem:item inSection:0];
     NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:item + 1 inSection:0];
     
-    UICollectionViewScrollPosition scrollPosition = self.scrollDirection == KCBannerViewScrollDirectionHorizontal ? UICollectionViewScrollPositionCenteredHorizontally : UICollectionViewScrollPositionCenteredVertically;
+    UICollectionViewScrollPosition scrollPosition = self.scrollDirection == UICollectionViewScrollDirectionHorizontal ? UICollectionViewScrollPositionCenteredHorizontally : UICollectionViewScrollPositionCenteredVertically;
     
     [self.collectionView scrollToItemAtIndexPath:currentIndexPath atScrollPosition:scrollPosition animated:NO];
     
@@ -120,7 +120,7 @@ static const NSInteger KCMaxSectionCount = 10000;
 {
     _timeInterval = 5.0;
     _repeat = YES;
-    _scrollDirection = KCBannerViewScrollDirectionHorizontal;
+    _scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
     [self addSubview:self.backgroundImageView];
     [self addSubview:self.collectionView];
@@ -225,7 +225,7 @@ static const NSInteger KCMaxSectionCount = 10000;
     if (count == 0) return;
     
     NSInteger currentPage = 0;
-    if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
+    if (self.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
         
         
        currentPage = (NSInteger)(scrollView.contentOffset.x / scrollView.bounds.size.width + 0.5) % count;
@@ -288,7 +288,7 @@ static const NSInteger KCMaxSectionCount = 10000;
                 
                 NSIndexPath *indexPath = [NSIndexPath indexPathForItem:KCMaxSectionCount * self.pageControl.numberOfPages / 2 inSection:0];
                 
-                if (self.scrollDirection == KCBannerViewScrollDirectionHorizontal) {
+                if (self.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
                     
                     
                     [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
@@ -344,12 +344,11 @@ static const NSInteger KCMaxSectionCount = 10000;
     
 }
 
-- (void)setScrollDirection:(KCBannerViewScrollDirection)scrollDirection
+- (void)setScrollDirection:(UICollectionViewScrollDirection)scrollDirection
 {
     _scrollDirection = scrollDirection;
     
-    
-    self.layout.scrollDirection = (UICollectionViewScrollDirection)scrollDirection;
+    self.layout.scrollDirection = scrollDirection;
 }
 
 #pragma mark -懒加载
