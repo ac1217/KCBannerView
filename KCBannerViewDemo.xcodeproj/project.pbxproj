@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		07930DEE1D182C2900AC2C8D /* KCBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 07930DE81D182C2900AC2C8D /* KCBanner.m */; };
-		07930DEF1D182C2900AC2C8D /* KCBannerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07930DEB1D182C2900AC2C8D /* KCBannerCell.m */; };
-		07930DF01D182C2900AC2C8D /* KCBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07930DED1D182C2900AC2C8D /* KCBannerView.m */; };
-		07BC5A0F1D24B59000E190E4 /* KCBannerViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 07BC5A0E1D24B59000E190E4 /* KCBannerViewLayout.m */; };
+		071F0E671EE6CF55005314B6 /* KCBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 071F0E601EE6CF55005314B6 /* KCBanner.m */; };
+		071F0E681EE6CF55005314B6 /* KCBannerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 071F0E621EE6CF55005314B6 /* KCBannerCell.m */; };
+		071F0E691EE6CF55005314B6 /* KCBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 071F0E651EE6CF55005314B6 /* KCBannerView.m */; };
 		07E4D81E1C6B4719000A29EF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E4D81D1C6B4719000A29EF /* main.m */; };
 		07E4D8211C6B4719000A29EF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E4D8201C6B4719000A29EF /* AppDelegate.m */; };
 		07E4D8241C6B4719000A29EF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E4D8231C6B4719000A29EF /* ViewController.m */; };
@@ -40,14 +39,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		07930DE71D182C2900AC2C8D /* KCBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBanner.h; sourceTree = "<group>"; };
-		07930DE81D182C2900AC2C8D /* KCBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBanner.m; sourceTree = "<group>"; };
-		07930DEA1D182C2900AC2C8D /* KCBannerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBannerCell.h; sourceTree = "<group>"; };
-		07930DEB1D182C2900AC2C8D /* KCBannerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBannerCell.m; sourceTree = "<group>"; };
-		07930DEC1D182C2900AC2C8D /* KCBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBannerView.h; sourceTree = "<group>"; };
-		07930DED1D182C2900AC2C8D /* KCBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBannerView.m; sourceTree = "<group>"; };
-		07BC5A0D1D24B59000E190E4 /* KCBannerViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBannerViewLayout.h; sourceTree = "<group>"; };
-		07BC5A0E1D24B59000E190E4 /* KCBannerViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBannerViewLayout.m; sourceTree = "<group>"; };
+		071F0E5F1EE6CF55005314B6 /* KCBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBanner.h; sourceTree = "<group>"; };
+		071F0E601EE6CF55005314B6 /* KCBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBanner.m; sourceTree = "<group>"; };
+		071F0E611EE6CF55005314B6 /* KCBannerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBannerCell.h; sourceTree = "<group>"; };
+		071F0E621EE6CF55005314B6 /* KCBannerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBannerCell.m; sourceTree = "<group>"; };
+		071F0E631EE6CF55005314B6 /* KCBannerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBannerProtocol.h; sourceTree = "<group>"; };
+		071F0E641EE6CF55005314B6 /* KCBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBannerView.h; sourceTree = "<group>"; };
+		071F0E651EE6CF55005314B6 /* KCBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBannerView.m; sourceTree = "<group>"; };
 		07E4D8191C6B4719000A29EF /* KCBannerViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KCBannerViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07E4D81D1C6B4719000A29EF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		07E4D81F1C6B4719000A29EF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -64,7 +62,6 @@
 		07E4D83D1C6B4719000A29EF /* KCBannerViewDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KCBannerViewDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		07E4D8411C6B4719000A29EF /* KCBannerViewDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCBannerViewDemoUITests.m; sourceTree = "<group>"; };
 		07E4D8431C6B4719000A29EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		07E6522A1DDBF22D0025D09E /* KCBannerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCBannerProtocol.h; sourceTree = "<group>"; };
 		3D04749A6EF6D2FDC0B353A6 /* Pods-KCBannerViewDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KCBannerViewDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-KCBannerViewDemo/Pods-KCBannerViewDemo.release.xcconfig"; sourceTree = "<group>"; };
 		4A44CA6CF0FC1FC9B358ECB9 /* Pods_KCBannerViewDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KCBannerViewDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7C70289C87B44D5F3346ADB /* Pods-KCBannerViewDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KCBannerViewDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KCBannerViewDemo/Pods-KCBannerViewDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -99,34 +96,16 @@
 		07930DE51D182C2900AC2C8D /* KCBannerView */ = {
 			isa = PBXGroup;
 			children = (
-				07930DE61D182C2900AC2C8D /* Model */,
-				07930DE91D182C2900AC2C8D /* View */,
+				071F0E5F1EE6CF55005314B6 /* KCBanner.h */,
+				071F0E601EE6CF55005314B6 /* KCBanner.m */,
+				071F0E611EE6CF55005314B6 /* KCBannerCell.h */,
+				071F0E621EE6CF55005314B6 /* KCBannerCell.m */,
+				071F0E631EE6CF55005314B6 /* KCBannerProtocol.h */,
+				071F0E641EE6CF55005314B6 /* KCBannerView.h */,
+				071F0E651EE6CF55005314B6 /* KCBannerView.m */,
 			);
 			path = KCBannerView;
 			sourceTree = SOURCE_ROOT;
-		};
-		07930DE61D182C2900AC2C8D /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				07930DE71D182C2900AC2C8D /* KCBanner.h */,
-				07930DE81D182C2900AC2C8D /* KCBanner.m */,
-				07BC5A0D1D24B59000E190E4 /* KCBannerViewLayout.h */,
-				07BC5A0E1D24B59000E190E4 /* KCBannerViewLayout.m */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		07930DE91D182C2900AC2C8D /* View */ = {
-			isa = PBXGroup;
-			children = (
-				07930DEA1D182C2900AC2C8D /* KCBannerCell.h */,
-				07930DEB1D182C2900AC2C8D /* KCBannerCell.m */,
-				07930DEC1D182C2900AC2C8D /* KCBannerView.h */,
-				07930DED1D182C2900AC2C8D /* KCBannerView.m */,
-				07E6522A1DDBF22D0025D09E /* KCBannerProtocol.h */,
-			);
-			path = View;
-			sourceTree = "<group>";
 		};
 		07E4D8101C6B4719000A29EF = {
 			isa = PBXGroup;
@@ -395,11 +374,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				07E4D8241C6B4719000A29EF /* ViewController.m in Sources */,
-				07930DEE1D182C2900AC2C8D /* KCBanner.m in Sources */,
-				07930DF01D182C2900AC2C8D /* KCBannerView.m in Sources */,
-				07BC5A0F1D24B59000E190E4 /* KCBannerViewLayout.m in Sources */,
+				071F0E671EE6CF55005314B6 /* KCBanner.m in Sources */,
+				071F0E681EE6CF55005314B6 /* KCBannerCell.m in Sources */,
 				07E4D8211C6B4719000A29EF /* AppDelegate.m in Sources */,
-				07930DEF1D182C2900AC2C8D /* KCBannerCell.m in Sources */,
+				071F0E691EE6CF55005314B6 /* KCBannerView.m in Sources */,
 				07E4D81E1C6B4719000A29EF /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

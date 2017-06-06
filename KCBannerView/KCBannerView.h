@@ -11,7 +11,7 @@
 #import "KCBannerProtocol.h"
 
 typedef NS_ENUM(NSInteger, KCBannerViewScrollDirection) {
-    KCBannerViewScrollDirectionVertical,
+    KCBannerViewScrollDirectionVertical = 0,
     KCBannerViewScrollDirectionHorizontal
 };
 
@@ -50,6 +50,8 @@ typedef NS_ENUM(NSInteger, KCBannerViewDescPosition) {
 @interface KCBannerView : UIView
 
 
+/*kind of UIImage or imageNamed*/
+@property (nonatomic, strong) UIImage *placeholderImage;
 // 页数控件
 @property (nonatomic, strong, readonly) UIPageControl *pageControl;
 
@@ -73,6 +75,10 @@ typedef NS_ENUM(NSInteger, KCBannerViewDescPosition) {
 @property (nonatomic, assign) KCBannerViewDescPosition descPosition;
 
 
+
+- (void)setPageControlPageImage:(UIImage *)pageImage;
+
+- (void)setPageControlCurrentPageImage:(UIImage *)currentPageImage;
 
 // 刷新数据
 - (void)reloadData;

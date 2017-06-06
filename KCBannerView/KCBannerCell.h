@@ -18,9 +18,11 @@ typedef NS_ENUM(NSInteger, KCBannerCellDescPosition) {
 extern NSString *const KCBannerCellReuseID;
 
 @interface KCBannerCell : UICollectionViewCell
-@property (nonatomic, strong) id <KCBannerProtocol> banner;
 
-@property (nonatomic, weak, readonly) UIImageView *imageView;
+- (void)setBanner:(id <KCBannerProtocol>)banner placeholder:(UIImage *)placeholder;
+
+
+@property (nonatomic, strong) UIImageView *imageView;
 
 @property (nonatomic, assign) KCBannerCellDescPosition descPosition;
 

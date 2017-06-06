@@ -9,7 +9,7 @@
 #import "KCBannerView.h"
 #import "KCBannerCell.h"
 #import "KCBanner.h"
-#import "KCBannerViewLayout.h"
+
 
 NSString *const KCBannerViewContentOffsetDicChangeNotification = @"KCBannerViewContentOffsetDicChangeNotification";
 NSString *const KCBannerViewDicChangeFrameKey = @"KCBannerViewDicChangeFrameKey";
@@ -33,12 +33,14 @@ NSString *const KCBannerViewDicChangeFrameKey = @"KCBannerViewDicChangeFrameKey"
 
 static const NSInteger KCMaxSectionCount = 10000;
 
-@interface KCBannerView () <UICollectionViewDataSource, UICollectionViewDelegate>{
+@interface KCBannerView () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>{
     UIPageControl *_pageControl;
     BOOL _repeat;
     UIImageView *_backgroundImageView;
 }
 
+
+@property (nonatomic,strong) UICollectionViewFlowLayout *layout;
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 
@@ -56,7 +58,7 @@ static const NSInteger KCMaxSectionCount = 10000;
     [self removeTimer];
 }
 
-#pragma mark -内部方法
+#pragma mark -Private Method
 
 - (void)addTimer
 {
@@ -136,11 +138,11 @@ static const NSInteger KCMaxSectionCount = 10000;
     
     
     CGFloat pageControlX = 0;
-    CGFloat pageControlY = self.frame.size.height - pageControlSize.height;
+    CGFloat pageControlY = self.bounds.size.height - pageControlSize.height;
   
     if (self.pageControlPosition == KCBannerViewPageControlPositionRight) {
         
-        pageControlX = self.frame.size.width - margin - pageControlSize.width;
+        pageControlX = self.bounds.size.width - margin - pageControlSize.width;
         
     }else if (self.pageControlPosition == KCBannerViewPageControlPositionLeft){
         
@@ -148,7 +150,7 @@ static const NSInteger KCMaxSectionCount = 10000;
         
     }else {
         
-        pageControlX = (self.frame.size.width - pageControlSize.width) * 0.5;
+        pageControlX = (self.bounds.size.width - pageControlSize.width) * 0.5;
     }
     
     self.pageControl.frame = CGRectMake(pageControlX, pageControlY, pageControlSize.width, pageControlSize.height);
@@ -162,7 +164,7 @@ static const NSInteger KCMaxSectionCount = 10000;
 }
 
 
-#pragma mark -UICollectionViewdataSource
+#pragma mark -UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
@@ -180,14 +182,21 @@ static const NSInteger KCMaxSectionCount = 10000;
 {
     KCBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:KCBannerCellReuseID forIndexPath:indexPath];
     
-    cell.banner = [self.dataSource bannerView:self bannerForItemAtIndex:(indexPath.row % self.pageControl.numberOfPages)];
+    id banner = [self.dataSource bannerView:self bannerForItemAtIndex:(indexPath.row % self.pageControl.numberOfPages)];
+    [cell setBanner:banner placeholder:self.placeholderImage];
     
     cell.descPosition = (KCBannerCellDescPosition)self.descPosition;
     
     return cell;
 }
 
-#pragma mark -UICollectionViewDelegate
+#pragma mark -UICollectionViewDelegateFlowLayout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return collectionView.bounds.size;
+}
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([self.delegate respondsToSelector:@selector(bannerView:didSelectBannerAtIndex:)]) {
@@ -220,6 +229,7 @@ static const NSInteger KCMaxSectionCount = 10000;
         
         
        currentPage = (NSInteger)(scrollView.contentOffset.x / scrollView.bounds.size.width + 0.5) % count;
+        
     }else {
         
         currentPage = (NSInteger)(scrollView.contentOffset.y / scrollView.bounds.size.height + 0.5) % count;
@@ -266,6 +276,8 @@ static const NSInteger KCMaxSectionCount = 10000;
     
     [self.collectionView reloadData];
     
+    [self setNeedsLayout];
+    
     
     [self addTimer];
     
@@ -290,6 +302,19 @@ static const NSInteger KCMaxSectionCount = 10000;
             
         });
     }
+    
+}
+
+
+- (void)setPageControlPageImage:(UIImage *)pageImage
+{
+    
+    [self.pageControl setValue:pageImage forKeyPath:@"pageImage"];
+}
+
+- (void)setPageControlCurrentPageImage:(UIImage *)currentPageImage
+{
+    [self.pageControl setValue:currentPageImage forKeyPath:@"currentPageImage"];
     
 }
 
@@ -323,9 +348,8 @@ static const NSInteger KCMaxSectionCount = 10000;
 {
     _scrollDirection = scrollDirection;
     
-    KCBannerViewLayout *layout = (KCBannerViewLayout *)self.collectionView.collectionViewLayout;
     
-    layout.scrollDirection = (UICollectionViewScrollDirection)scrollDirection;
+    self.layout.scrollDirection = (UICollectionViewScrollDirection)scrollDirection;
 }
 
 #pragma mark -懒加载
@@ -338,6 +362,7 @@ static const NSInteger KCMaxSectionCount = 10000;
         _pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
         _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
         _pageControl.userInteractionEnabled = NO;
+//        _pageControl addTarget:self action:@selector(<#selector#>) forControlEvents:<#(UIControlEvents)#>
     }
     return _pageControl;
 }
@@ -346,10 +371,8 @@ static const NSInteger KCMaxSectionCount = 10000;
 {
     if (!_collectionView) {
         
-        KCBannerViewLayout *layout = [[KCBannerViewLayout alloc] init];
-        layout.scrollDirection = (UICollectionViewScrollDirection)self.scrollDirection;
         
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.layout];
         
         [_collectionView registerClass:[KCBannerCell class] forCellWithReuseIdentifier:KCBannerCellReuseID];
         _collectionView.backgroundColor = [UIColor clearColor];
@@ -371,6 +394,19 @@ static const NSInteger KCMaxSectionCount = 10000;
         _backgroundImageView.clipsToBounds = YES;
     }
     return _backgroundImageView;
+}
+
+- (UICollectionViewFlowLayout *)layout
+{
+    if (!_layout) {
+        _layout = [UICollectionViewFlowLayout new];
+        
+        _layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        
+        _layout.minimumLineSpacing = 0;
+        _layout.minimumInteritemSpacing = 0;
+    }
+    return _layout;
 }
 
 

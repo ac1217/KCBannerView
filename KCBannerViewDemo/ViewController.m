@@ -75,7 +75,7 @@
     // 数据源
     bannerView.dataSource = self;
     
-    bannerView.pageControlPosition = KCBannerViewPageControlPositionRight;
+//    bannerView.pageControlPosition = KCBannerViewPageControlPositionRight;
     bannerView.descPosition = KCBannerViewDescPositionBottom;
     // 添加
     [self.sv addSubview:bannerView];
@@ -84,11 +84,18 @@
     
     
     
+    [bannerView setPageControlPageImage:[UIImage imageNamed:@"homepage_btn_like_off"]];
+    [bannerView setPageControlCurrentPageImage:[UIImage imageNamed:@"homepage_btn_like_on"]];
+
+    
+    
+    
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    [self.bannerView reloadData];
+    
+//    [self.bannerView reloadData];
 }
 
 - (void)viewDidLayoutSubviews
@@ -106,7 +113,7 @@
 - (void)bannerView:(KCBannerView *)bannerView didSelectBannerAtIndex:(NSInteger)index
 {
     
-    [bannerView reloadData];
+//    [bannerView reloadData];
 }
 
 #pragma mark -KCBannerViewDatasource

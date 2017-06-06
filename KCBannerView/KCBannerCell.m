@@ -16,34 +16,54 @@ extern NSString *const KCBannerViewDicChangeFrameKey;
 
 NSString *const KCBannerCellReuseID = @"KCBannerCell";
 
-@interface KCBannerCell ()
-@property (nonatomic, weak) UIImageView *imageView;
-@property (nonatomic, weak) UILabel *titleLabel;
+@interface KCBannerCell (){
+    id <KCBannerProtocol> _banner;
+    
+}
+@property (nonatomic, strong) UILabel *titleLabel;
 @end
 
 @implementation KCBannerCell
+
+- (UIImageView *)imageView
+{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] init];
+        _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.clipsToBounds = YES;
+    }
+    return _imageView;
+}
+
+- (UILabel *)titleLabel
+{
+    if (!_titleLabel) {
+        _titleLabel = [[UILabel alloc] init];
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
+        _titleLabel.textColor = [UIColor whiteColor];
+        _titleLabel.backgroundColor = [UIColor colorWithRed:100/255.0 green:100/255.0 blue:100/255.0 alpha:0.5];
+    }
+    
+    return _titleLabel;
+}
+
+#pragma mark -Life Cycle
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
         
-        UIImageView *imageView = [[UIImageView alloc] init];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.clipsToBounds = YES;
-        [self.contentView addSubview:imageView];
-        self.imageView = imageView;
+        [self.contentView addSubview:self.imageView];
         
-        UILabel *titleLabel = [[UILabel alloc] init];
-        titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.textColor = [UIColor whiteColor];
-        titleLabel.backgroundColor = [UIColor colorWithRed:100/255.0 green:100/255.0 blue:100/255.0 alpha:0.5];
-        [self.contentView addSubview:titleLabel];
-        self.titleLabel = titleLabel;
+        
+        [self.contentView addSubview:self.titleLabel];
+        
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(frameDidChange:) name:KCBannerViewContentOffsetDicChangeNotification object:nil];
         
@@ -78,22 +98,9 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
     self.titleLabel.frame = CGRectMake(0, titleY, self.contentView.frame.size.width, titleH);
 }
 
-- (void)setBanner:(id<KCBannerProtocol>)banner
+- (void)setBanner:(id<KCBannerProtocol>)banner placeholder:(UIImage *)placeholder
 {
     _banner = banner;
-    
-    UIImage *placeholderImage = nil;
-    
-    if ([banner respondsToSelector:@selector(placeholderImageResource)]) {
-        
-        if ([banner.placeholderImageResource isKindOfClass:[NSString class]]) {
-            placeholderImage = [UIImage imageNamed:banner.placeholderImageResource];
-        }else {
-            placeholderImage = banner.placeholderImageResource;
-        }
-        
-    }
-    
     
     if ([banner.imageResource isKindOfClass:[UIImage class]]) {
         
@@ -101,13 +108,13 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
         
     }else if ([banner.imageResource isKindOfClass:[NSURL class]]) {
         
-        [self.imageView sd_setImageWithURL:banner.imageResource placeholderImage:placeholderImage];
+        [self.imageView sd_setImageWithURL:banner.imageResource placeholderImage:placeholder];
         
     }else if([banner.imageResource isKindOfClass:[NSString class]]) {
         
         if ([banner.imageResource hasPrefix:@"http"]) {
             
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:banner.imageResource] placeholderImage:placeholderImage];
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:banner.imageResource] placeholderImage:placeholder];
         }else {
             self.imageView.image = [UIImage imageNamed:banner.imageResource];
         }
@@ -135,9 +142,11 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
         
         self.titleLabel.hidden = YES;
     }
+
     
     
 }
+
 
 
 @end

@@ -13,8 +13,6 @@
 
 @optional
 @property (nonatomic, copy, readonly) NSString *desc;
-/*kind of UIImage or imageNamed*/
-@property (nonatomic, strong, readonly) id placeholderImageResource;
 
 
 @end
