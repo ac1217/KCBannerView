@@ -249,7 +249,7 @@ static const NSInteger KCMaxSectionCount = 10000;
     {
         
         CGRect frame = self.changeFrame;
-        frame.origin.y = 0;
+        frame.origin.y = offsetY * 0.5;
         self.changeFrame = frame;
         self.collectionView.clipsToBounds = YES;
         

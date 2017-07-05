@@ -8,8 +8,7 @@
 
 #import "KCBannerCell.h"
 #import "KCBanner.h"
-#import "UIImageView+WebCache.h"
-
+#import "YYWebImage.h"
 
 extern NSString *const KCBannerViewContentOffsetDicChangeNotification;
 extern NSString *const KCBannerViewDicChangeFrameKey;
@@ -107,14 +106,13 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
         self.imageView.image = banner.imageResource;
         
     }else if ([banner.imageResource isKindOfClass:[NSURL class]]) {
-        
-        [self.imageView sd_setImageWithURL:banner.imageResource placeholderImage:placeholder];
+        [self.imageView yy_setImageWithURL:banner.imageResource placeholder:placeholder];
         
     }else if([banner.imageResource isKindOfClass:[NSString class]]) {
         
         if ([banner.imageResource hasPrefix:@"http"]) {
             
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:banner.imageResource] placeholderImage:placeholder];
+            [self.imageView yy_setImageWithURL:[NSURL URLWithString:banner.imageResource] placeholder:placeholder];
         }else {
             self.imageView.image = [UIImage imageNamed:banner.imageResource];
         }
