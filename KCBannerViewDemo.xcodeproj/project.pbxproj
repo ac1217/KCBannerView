@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0549A577258CD47E9862374F /* Pods_KCBannerViewDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFD537C8C9A48E8FEC943F8F /* Pods_KCBannerViewDemoTests.framework */; };
-		071F0E671EE6CF55005314B6 /* KCBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 071F0E601EE6CF55005314B6 /* KCBanner.m */; };
 		071F0E681EE6CF55005314B6 /* KCBannerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 071F0E621EE6CF55005314B6 /* KCBannerCell.m */; };
 		071F0E691EE6CF55005314B6 /* KCBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 071F0E651EE6CF55005314B6 /* KCBannerView.m */; };
+		072796EC1F17CAA500819B29 /* KCBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 072796EB1F17CAA500819B29 /* KCBanner.m */; };
 		07E4D81E1C6B4719000A29EF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E4D81D1C6B4719000A29EF /* main.m */; };
 		07E4D8211C6B4719000A29EF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E4D8201C6B4719000A29EF /* AppDelegate.m */; };
 		07E4D8241C6B4719000A29EF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E4D8231C6B4719000A29EF /* ViewController.m */; };
@@ -41,13 +41,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		071F0E5F1EE6CF55005314B6 /* KCBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBanner.h; sourceTree = "<group>"; };
-		071F0E601EE6CF55005314B6 /* KCBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBanner.m; sourceTree = "<group>"; };
 		071F0E611EE6CF55005314B6 /* KCBannerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBannerCell.h; sourceTree = "<group>"; };
 		071F0E621EE6CF55005314B6 /* KCBannerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBannerCell.m; sourceTree = "<group>"; };
-		071F0E631EE6CF55005314B6 /* KCBannerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBannerProtocol.h; sourceTree = "<group>"; };
 		071F0E641EE6CF55005314B6 /* KCBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBannerView.h; sourceTree = "<group>"; };
 		071F0E651EE6CF55005314B6 /* KCBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBannerView.m; sourceTree = "<group>"; };
+		072796EA1F17CAA500819B29 /* KCBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCBanner.h; sourceTree = "<group>"; };
+		072796EB1F17CAA500819B29 /* KCBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCBanner.m; sourceTree = "<group>"; };
 		07E4D8191C6B4719000A29EF /* KCBannerViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KCBannerViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07E4D81D1C6B4719000A29EF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		07E4D81F1C6B4719000A29EF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -106,11 +105,10 @@
 		07930DE51D182C2900AC2C8D /* KCBannerView */ = {
 			isa = PBXGroup;
 			children = (
-				071F0E5F1EE6CF55005314B6 /* KCBanner.h */,
-				071F0E601EE6CF55005314B6 /* KCBanner.m */,
+				072796EA1F17CAA500819B29 /* KCBanner.h */,
+				072796EB1F17CAA500819B29 /* KCBanner.m */,
 				071F0E611EE6CF55005314B6 /* KCBannerCell.h */,
 				071F0E621EE6CF55005314B6 /* KCBannerCell.m */,
-				071F0E631EE6CF55005314B6 /* KCBannerProtocol.h */,
 				071F0E641EE6CF55005314B6 /* KCBannerView.h */,
 				071F0E651EE6CF55005314B6 /* KCBannerView.m */,
 			);
@@ -486,11 +484,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				07E4D8241C6B4719000A29EF /* ViewController.m in Sources */,
-				071F0E671EE6CF55005314B6 /* KCBanner.m in Sources */,
 				071F0E681EE6CF55005314B6 /* KCBannerCell.m in Sources */,
 				07E4D8211C6B4719000A29EF /* AppDelegate.m in Sources */,
 				071F0E691EE6CF55005314B6 /* KCBannerView.m in Sources */,
 				07E4D81E1C6B4719000A29EF /* main.m in Sources */,
+				072796EC1F17CAA500819B29 /* KCBanner.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

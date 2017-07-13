@@ -7,7 +7,7 @@
 //
 
 #import "KCBannerCell.h"
-#import "KCBanner.h"
+
 #import "YYWebImage.h"
 
 extern NSString *const KCBannerViewContentOffsetDicChangeNotification;
@@ -15,11 +15,7 @@ extern NSString *const KCBannerViewDicChangeFrameKey;
 
 NSString *const KCBannerCellReuseID = @"KCBannerCell";
 
-@interface KCBannerCell (){
-    id <KCBannerProtocol> _banner;
-    
-}
-@property (nonatomic, strong) UILabel *titleLabel;
+@interface KCBannerCell ()
 @end
 
 @implementation KCBannerCell
@@ -66,8 +62,17 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(frameDidChange:) name:KCBannerViewContentOffsetDicChangeNotification object:nil];
         
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress)];
+        
+        [self.contentView addGestureRecognizer:longPress];
+        
     }
     return self;
+}
+
+- (void)longPress
+{
+    !self.longPressBlock ? : self.longPressBlock(self);
 }
 
 - (void)frameDidChange:(NSNotification *)note
@@ -97,53 +102,6 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
     self.titleLabel.frame = CGRectMake(0, titleY, self.contentView.frame.size.width, titleH);
 }
 
-- (void)setBanner:(id<KCBannerProtocol>)banner placeholder:(UIImage *)placeholder
-{
-    _banner = banner;
-    
-    if ([banner.imageResource isKindOfClass:[UIImage class]]) {
-        
-        self.imageView.image = banner.imageResource;
-        
-    }else if ([banner.imageResource isKindOfClass:[NSURL class]]) {
-        [self.imageView yy_setImageWithURL:banner.imageResource placeholder:placeholder];
-        
-    }else if([banner.imageResource isKindOfClass:[NSString class]]) {
-        
-        if ([banner.imageResource hasPrefix:@"http"]) {
-            
-            [self.imageView yy_setImageWithURL:[NSURL URLWithString:banner.imageResource] placeholder:placeholder];
-        }else {
-            self.imageView.image = [UIImage imageNamed:banner.imageResource];
-        }
-        
-    }else {
-        self.imageView.image = nil;
-    }
-    
-    
-    if ([banner respondsToSelector:@selector(desc)]) {
-        
-        if (banner.desc.length) {
-            
-            self.titleLabel.hidden = NO;
-            
-            self.titleLabel.text = banner.desc;
-            
-        }else {
-            
-            self.titleLabel.hidden = YES;
-        }
-        
-        
-    }else {
-        
-        self.titleLabel.hidden = YES;
-    }
-
-    
-    
-}
 
 
 

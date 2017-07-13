@@ -7,9 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "KCBanner.h"
-#import "KCBannerProtocol.h"
-
 
 typedef NS_ENUM(NSInteger, KCBannerViewPageControlPosition) {
     KCBannerViewPageControlPositionCenter = 0,
@@ -30,7 +27,14 @@ typedef NS_ENUM(NSInteger, KCBannerViewDescPosition) {
 
 - (NSInteger)numberOfBannersInBannerView:(KCBannerView *)bannerView;
 
-- (id <KCBannerProtocol>)bannerView:(KCBannerView *)bannerView bannerForItemAtIndex:(NSInteger)index;
+// 可以返回UIImage,NSString,NSURL,NSData类型
+- (id)bannerView:(KCBannerView *)bannerView imageResourceAtIndex:(NSInteger)index;
+//- (id <KCBannerProtocol>)bannerView:(KCBannerView *)bannerView bannerAtIndex:(NSInteger)index;
+
+@optional
+- (UIImage *)bannerView:(KCBannerView *)bannerView placeholderImageAtIndex:(NSInteger)index;
+- (NSString *)bannerView:(KCBannerView *)bannerView descriptionStringAtIndex:(NSInteger)index;
+- (NSAttributedString *)bannerView:(KCBannerView *)bannerView descriptionAttributedStringAtIndex:(NSInteger)index;
 
 @end
 
@@ -39,7 +43,8 @@ typedef NS_ENUM(NSInteger, KCBannerViewDescPosition) {
 
 @optional
 // 点击回调
-- (void)bannerView:(KCBannerView *)bannerView didSelectBannerAtIndex:(NSInteger)index;
+- (void)bannerView:(KCBannerView *)bannerView didTapImageAtIndex:(NSInteger)index;
+
 
 @end
 
@@ -51,8 +56,8 @@ typedef NS_ENUM(NSInteger, KCBannerViewDescPosition) {
 // 页数控件
 @property (nonatomic, strong, readonly) UIPageControl *pageControl;
 
-// 占位图
-@property (nonatomic, strong, readonly) UIImageView *backgroundImageView;
+// 当数据为空时显示的图片空间
+@property (nonatomic, strong, readonly) UIImageView *emptyImageView;
 
 // 代理
 @property (nonatomic, weak) id<KCBannerViewDelegate> delegate;
@@ -79,7 +84,7 @@ typedef NS_ENUM(NSInteger, KCBannerViewDescPosition) {
 // 刷新数据
 - (void)reloadData;
 
-// 偏移量
+// 偏移量,下拉图片缩放
 @property (nonatomic, assign) CGPoint contentOffset;
 
 

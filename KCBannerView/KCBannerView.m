@@ -8,35 +8,17 @@
 
 #import "KCBannerView.h"
 #import "KCBannerCell.h"
-#import "KCBanner.h"
-
+#import "YYWebImage.h"
 
 NSString *const KCBannerViewContentOffsetDicChangeNotification = @"KCBannerViewContentOffsetDicChangeNotification";
 NSString *const KCBannerViewDicChangeFrameKey = @"KCBannerViewDicChangeFrameKey";
-
-@implementation NSTimer (KCExtension)
-
-+ (void)kc_block:(NSTimer *)timer {
-    if ([timer userInfo]) {
-        void (^block)(NSTimer *timer) = (void (^)(NSTimer *timer))[timer userInfo];
-        block(timer);
-    }
-}
-
-+ (NSTimer *)kc_timerWithTimeInterval:(NSTimeInterval)ti block:(void(^)(NSTimer *timer))block repeats:(BOOL)yesOrNo
-{
-    return [NSTimer timerWithTimeInterval:ti target:self selector:@selector(kc_block:) userInfo:[block copy] repeats:yesOrNo];
-}
-
-@end
-
 
 static const NSInteger KCMaxSectionCount = 10000;
 
 @interface KCBannerView () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>{
     UIPageControl *_pageControl;
     BOOL _repeat;
-    UIImageView *_backgroundImageView;
+    UIImageView *_emptyImageView;
 }
 
 
@@ -44,9 +26,11 @@ static const NSInteger KCMaxSectionCount = 10000;
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 
-@property (nonatomic, strong) NSTimer *timer;
 
 @property (nonatomic, assign) CGRect changeFrame;
+
+
+@property (nonatomic,strong) dispatch_source_t timer;
 
 @end
 
@@ -67,16 +51,28 @@ static const NSInteger KCMaxSectionCount = 10000;
     [self removeTimer];
     
     __weak typeof(self) weakSelf = self;
-    self.timer = [NSTimer kc_timerWithTimeInterval:self.timeInterval block:^(NSTimer *timer) {
+    
+    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, self.timeInterval * NSEC_PER_SEC, self.timeInterval * NSEC_PER_SEC);
+    dispatch_source_set_event_handler(timer, ^{
+        
         [weakSelf nextPage];
-    } repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:self.timer forMode: NSRunLoopCommonModes];
+    });
+    dispatch_resume(timer);
+    self.timer = timer;
+    
 }
 
 - (void)removeTimer
 {
-    [self.timer invalidate];
-    self.timer = nil;
+
+    if (self.timer) {
+        
+        dispatch_source_cancel(self.timer);
+        self.timer = nil;
+    }
+    
+    
 }
 
 - (void)nextPage
@@ -122,7 +118,7 @@ static const NSInteger KCMaxSectionCount = 10000;
     _repeat = YES;
     _scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
-    [self addSubview:self.backgroundImageView];
+    [self addSubview:self.emptyImageView];
     [self addSubview:self.collectionView];
     [self addSubview:self.pageControl];
 }
@@ -159,7 +155,7 @@ static const NSInteger KCMaxSectionCount = 10000;
     
     self.changeFrame = self.bounds;
     
-    self.backgroundImageView.frame = self.bounds;
+    self.emptyImageView.frame = self.bounds;
     
 }
 
@@ -171,7 +167,7 @@ static const NSInteger KCMaxSectionCount = 10000;
     
     NSInteger count = self.pageControl.numberOfPages;
 
-    self.backgroundImageView.hidden = count != 0;
+    self.emptyImageView.hidden = count != 0;
     
     return count > 1 ? count * KCMaxSectionCount : count;
     
@@ -182,8 +178,72 @@ static const NSInteger KCMaxSectionCount = 10000;
 {
     KCBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:KCBannerCellReuseID forIndexPath:indexPath];
     
-    id banner = [self.dataSource bannerView:self bannerForItemAtIndex:(indexPath.row % self.pageControl.numberOfPages)];
-    [cell setBanner:banner placeholder:self.placeholderImage];
+    NSInteger index = indexPath.row % self.pageControl.numberOfPages;
+    
+    id imageResource = [self.dataSource bannerView:self imageResourceAtIndex:index];
+    
+    UIImage *placeholder = nil;
+    
+    if ([self.dataSource respondsToSelector:@selector(bannerView:placeholderImageAtIndex:)]) {
+        placeholder = [self.dataSource bannerView:self placeholderImageAtIndex:index];
+    }
+    
+    if ([imageResource isKindOfClass:[UIImage class]]) {
+        
+        cell.imageView.image = imageResource;
+        
+    }else if ([imageResource isKindOfClass:[NSURL class]]) {
+        [cell.imageView yy_setImageWithURL:imageResource placeholder:placeholder];
+        
+    }else if([imageResource isKindOfClass:[NSString class]]) {
+        
+        if ([imageResource hasPrefix:@"http"]) {
+            
+            [cell.imageView yy_setImageWithURL:[NSURL URLWithString:imageResource] placeholder:placeholder];
+        }else  {
+            cell.imageView.image = [UIImage imageNamed:imageResource];
+        }
+        
+    }else if ([imageResource isKindOfClass:[NSData class]]){
+        cell.imageView.image = [UIImage imageWithData:imageResource];
+        
+    }else {
+        
+        cell.imageView.image = nil;
+        
+    }
+    
+    if ([self.dataSource respondsToSelector:@selector(bannerView:descriptionAttributedStringAtIndex:)]) {
+        
+        NSAttributedString *attr = [self.dataSource bannerView:self descriptionAttributedStringAtIndex:index];
+        
+        if (attr) {
+            
+            cell.titleLabel.attributedText = attr;
+            cell.titleLabel.hidden = NO;
+        }else {
+            
+            cell.titleLabel.hidden = YES;
+        }
+        
+    }else if ([self.dataSource respondsToSelector:@selector(bannerView:descriptionStringAtIndex:)])
+    {
+        
+        NSString *str = [self.dataSource bannerView:self descriptionStringAtIndex:index];
+        
+        if (str) {
+            
+            cell.titleLabel.text = str;
+            cell.titleLabel.hidden = NO;
+        }else {
+            
+            cell.titleLabel.hidden = YES;
+        }
+        
+    }else {
+        cell.titleLabel.hidden = YES;
+    }
+    
     
     cell.descPosition = (KCBannerCellDescPosition)self.descPosition;
     
@@ -199,8 +259,8 @@ static const NSInteger KCMaxSectionCount = 10000;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self.delegate respondsToSelector:@selector(bannerView:didSelectBannerAtIndex:)]) {
-        [self.delegate bannerView:self didSelectBannerAtIndex:(indexPath.row % self.pageControl.numberOfPages)];
+    if ([self.delegate respondsToSelector:@selector(bannerView:didTapImageAtIndex:)]) {
+        [self.delegate bannerView:self didTapImageAtIndex:(indexPath.row % self.pageControl.numberOfPages)];
     }
 }
 
@@ -266,6 +326,8 @@ static const NSInteger KCMaxSectionCount = 10000;
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:KCBannerViewContentOffsetDicChangeNotification object:nil userInfo:@{KCBannerViewDicChangeFrameKey : [NSValue valueWithCGRect:self.changeFrame]}];
+    
+    self.emptyImageView.frame = self.changeFrame;
 
 }
 
@@ -385,14 +447,14 @@ static const NSInteger KCMaxSectionCount = 10000;
     return _collectionView;
 }
 
-- (UIImageView *)backgroundImageView
+- (UIImageView *)emptyImageView
 {
-    if (!_backgroundImageView) {
-        _backgroundImageView = [UIImageView new];
-        _backgroundImageView.contentMode = UIViewContentModeCenter;
-        _backgroundImageView.clipsToBounds = YES;
+    if (!_emptyImageView) {
+        _emptyImageView = [UIImageView new];
+        _emptyImageView.contentMode = UIViewContentModeCenter;
+        _emptyImageView.clipsToBounds = YES;
     }
-    return _backgroundImageView;
+    return _emptyImageView;
 }
 
 - (UICollectionViewFlowLayout *)layout
