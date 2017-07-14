@@ -7,16 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "KCBannerProtocol.h"
 
-@interface KCBanner : NSObject<KCBannerProtocol>
+
+@interface KCBanner : NSObject
 
 @property (nonatomic, strong) NSURL *url;
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UIImage *placeholderImage;
 
 // 标题
-@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *desc;
 
 
 

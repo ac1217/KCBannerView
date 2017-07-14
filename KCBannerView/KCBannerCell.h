@@ -19,9 +19,12 @@ extern NSString *const KCBannerCellReuseID;
 
 @interface KCBannerCell : UICollectionViewCell
 
-- (void)setBanner:(id <KCBannerProtocol>)banner placeholder:(UIImage *)placeholder;
+//- (void)setBanner:(id <KCBannerProtocol>)banner placeholder:(UIImage *)placeholder;
+
+@property (nonatomic,copy) void(^longPressBlock)(KCBannerCell * cell);
 
 
+@property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIImageView *imageView;
 
 @property (nonatomic, assign) KCBannerCellDescPosition descPosition;

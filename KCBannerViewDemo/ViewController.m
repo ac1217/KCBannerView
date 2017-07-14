@@ -9,9 +9,10 @@
 #import "ViewController.h"
 #import "KCBannerView.h"
 #import "KCBanner.h"
+
 @interface ViewController ()<KCBannerViewDelegate,KCBannerViewDataSource, UIScrollViewDelegate>
 
-@property (nonatomic, strong) NSArray *banners;
+@property (nonatomic, strong) NSArray <KCBanner *>*banners;
 
 
 @property (nonatomic, strong) KCBannerView *bannerView;
@@ -41,7 +42,7 @@
         
         KCBanner *banner1 = [[KCBanner alloc] init];
         banner1.url = [NSURL URLWithString:@"http://pic50.nipic.com/file/20141010/19650248_153632125000_2.jpg"];
-        banner1.title = @"sdfdsfsfsadfasdfasdfasdfsasfsdfds";
+        banner1.desc = @"sdfdsfsfsadfasdfasdfasdfsasfsdfds";
 //
 //        
         KCBanner *banner2 = [[KCBanner alloc] init];
@@ -50,7 +51,7 @@
         
         KCBanner *banner3 = [[KCBanner alloc] init];
         banner3.url = [NSURL URLWithString:@"http://pic50.nipic.com/file/20141010/19650248_153632125000_2.jpg"];
-        banner3.title = @"sdfdsfsfsfssadfsafsafdfds";
+        banner3.desc = @"sdfdsfsfsfssadfsafsafdfds";
         banner3.placeholderImage = [UIImage imageNamed:@"pic_default_icon"];
         
         _banners = @[banner0, banner1, banner2, banner3];
@@ -69,7 +70,7 @@
     // 创建
     KCBannerView *bannerView = [[KCBannerView alloc] init];
     
-    bannerView.backgroundImageView.image = [UIImage imageNamed:@"pic"];
+    bannerView.emptyImageView.image = [UIImage imageNamed:@"pic"];
     // 设置代理
     bannerView.delegate = self;
     // 数据源
@@ -110,17 +111,27 @@
 }
 
 #pragma mark -KCBannerViewDelegate
-- (void)bannerView:(KCBannerView *)bannerView didSelectBannerAtIndex:(NSInteger)index
+- (void)bannerView:(KCBannerView *)bannerView didTapBannerAtIndex:(NSInteger)index
 {
     
 //    [bannerView reloadData];
 }
 
+
 #pragma mark -KCBannerViewDatasource
-- (id<KCBannerProtocol> )bannerView:(KCBannerView *)bannerView bannerForItemAtIndex:(NSInteger)index
+- (id)bannerView:(KCBannerView *)bannerView imageResourceAtIndex:(NSInteger)index
 {
-    
-    return self.banners[index];
+    return [self.banners[index] url];
+}
+
+- (UIImage *)bannerView:(KCBannerView *)bannerView placeholderImageAtIndex:(NSInteger)index
+{
+    return [self.banners[index] placeholderImage];
+}
+
+- (NSString *)bannerView:(KCBannerView *)bannerView descriptionStringAtIndex:(NSInteger)index
+{
+    return self.banners[index].desc;
 }
 
 - (NSInteger)numberOfBannersInBannerView:(KCBannerView *)bannerView

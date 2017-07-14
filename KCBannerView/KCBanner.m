@@ -10,14 +10,5 @@
 
 @implementation KCBanner
 
-- (id)imageResource
-{
-    return self.url;
-}
-
-- (NSString *)desc
-{
-    return self.title;
-}
 
 @end
