@@ -53,11 +53,18 @@ static const NSInteger KCMaxSectionCount = 10000;
     __weak typeof(self) weakSelf = self;
     
     dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
-    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, self.timeInterval * NSEC_PER_SEC, self.timeInterval * NSEC_PER_SEC);
+    //开始时间
+    dispatch_time_t start = dispatch_time(DISPATCH_TIME_NOW, self.timeInterval * NSEC_PER_SEC);
+    
+    //间隔时间
+    uint64_t interval = self.timeInterval * NSEC_PER_SEC;
+    
+    dispatch_source_set_timer(timer, start, interval, 0);
     dispatch_source_set_event_handler(timer, ^{
         
         [weakSelf nextPage];
     });
+
     dispatch_resume(timer);
     self.timer = timer;
     
