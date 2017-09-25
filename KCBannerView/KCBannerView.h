@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, KCBannerViewDescPosition) {
 // 数据源
 @protocol KCBannerViewDataSource <NSObject>
 
-- (NSInteger)numberOfBannersInBannerView:(KCBannerView *)bannerView;
+- (NSInteger)numberOfImagesInBannerView:(KCBannerView *)bannerView;
 
 // 可以返回UIImage,NSString,NSURL,NSData类型
 - (id)bannerView:(KCBannerView *)bannerView imageResourceAtIndex:(NSInteger)index;

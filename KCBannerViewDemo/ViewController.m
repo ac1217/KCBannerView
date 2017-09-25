@@ -9,16 +9,12 @@
 #import "ViewController.h"
 #import "KCBannerView.h"
 #import "KCBanner.h"
-
 @interface ViewController ()<KCBannerViewDelegate,KCBannerViewDataSource, UIScrollViewDelegate>
-
-@property (nonatomic, strong) NSArray <KCBanner *>*banners;
-
 
 @property (nonatomic, strong) KCBannerView *bannerView;
 
 @property (nonatomic, strong) UIScrollView *sv;
-
+@property (nonatomic,strong) NSArray <KCBanner *>*banners;
 
 @end
 
@@ -29,6 +25,13 @@
     if (!_sv) {
         _sv = [[UIScrollView alloc] init];
         _sv.delegate = self;
+        
+        
+        if (@available(iOS 11.0, *)) {
+            _sv.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        } else {
+            // Fallback on earlier versions
+        }
     }
     return _sv;
 }
@@ -134,7 +137,7 @@
     return self.banners[index].desc;
 }
 
-- (NSInteger)numberOfBannersInBannerView:(KCBannerView *)bannerView
+- (NSInteger)numberOfImagesInBannerView:(KCBannerView *)bannerView
 {
     
     return self.banners.count;

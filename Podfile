@@ -5,7 +5,7 @@ use_frameworks!
 
 target 'KCBannerViewDemo' do
 
-pod 'YYWebImage'
+pod 'SDWebImage'
 
 end
 

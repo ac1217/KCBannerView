@@ -8,8 +8,6 @@
 
 #import "KCBannerCell.h"
 
-#import "YYWebImage.h"
-
 extern NSString *const KCBannerViewContentOffsetDicChangeNotification;
 extern NSString *const KCBannerViewDicChangeFrameKey;
 
@@ -85,9 +83,8 @@ NSString *const KCBannerCellReuseID = @"KCBannerCell";
     
 }
 
-- (void)layoutSubviews
+- (void)setupLayout
 {
-    [super layoutSubviews];
     
     self.imageView.frame = self.bounds;
     

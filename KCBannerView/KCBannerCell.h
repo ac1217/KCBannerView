@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-@class KCBanner;
 @protocol KCBannerProtocol;
 
 typedef NS_ENUM(NSInteger, KCBannerCellDescPosition) {
@@ -19,14 +18,11 @@ extern NSString *const KCBannerCellReuseID;
 
 @interface KCBannerCell : UICollectionViewCell
 
-//- (void)setBanner:(id <KCBannerProtocol>)banner placeholder:(UIImage *)placeholder;
-
 @property (nonatomic,copy) void(^longPressBlock)(KCBannerCell * cell);
-
-
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIImageView *imageView;
 
 @property (nonatomic, assign) KCBannerCellDescPosition descPosition;
 
+- (void)setupLayout;
 @end

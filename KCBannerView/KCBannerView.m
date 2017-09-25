@@ -8,7 +8,7 @@
 
 #import "KCBannerView.h"
 #import "KCBannerCell.h"
-#import "YYWebImage.h"
+#import "UIImageView+WebCache.h"
 
 NSString *const KCBannerViewContentOffsetDicChangeNotification = @"KCBannerViewContentOffsetDicChangeNotification";
 NSString *const KCBannerViewDicChangeFrameKey = @"KCBannerViewDicChangeFrameKey";
@@ -200,13 +200,15 @@ static const NSInteger KCMaxSectionCount = 10000;
         cell.imageView.image = imageResource;
         
     }else if ([imageResource isKindOfClass:[NSURL class]]) {
-        [cell.imageView yy_setImageWithURL:imageResource placeholder:placeholder];
+        
+        [cell.imageView sd_setImageWithURL:imageResource placeholderImage:placeholder];
         
     }else if([imageResource isKindOfClass:[NSString class]]) {
         
         if ([imageResource hasPrefix:@"http"]) {
             
-            [cell.imageView yy_setImageWithURL:[NSURL URLWithString:imageResource] placeholder:placeholder];
+            [cell.imageView sd_setImageWithURL:[NSURL URLWithString:imageResource] placeholderImage:placeholder];
+            
         }else  {
             cell.imageView.image = [UIImage imageNamed:imageResource];
         }
@@ -253,7 +255,7 @@ static const NSInteger KCMaxSectionCount = 10000;
     
     
     cell.descPosition = (KCBannerCellDescPosition)self.descPosition;
-    
+    [cell setupLayout];
     return cell;
 }
 
@@ -288,7 +290,7 @@ static const NSInteger KCMaxSectionCount = 10000;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSInteger count = [self.dataSource numberOfBannersInBannerView:self];
+    NSInteger count = [self.dataSource numberOfImagesInBannerView:self];
     if (count == 0) return;
     
     NSInteger currentPage = 0;
@@ -341,7 +343,7 @@ static const NSInteger KCMaxSectionCount = 10000;
 - (void)reloadData
 {
     
-    self.pageControl.numberOfPages = [self.dataSource numberOfBannersInBannerView:self];
+    self.pageControl.numberOfPages = [self.dataSource numberOfImagesInBannerView:self];
     
     [self.collectionView reloadData];
     
