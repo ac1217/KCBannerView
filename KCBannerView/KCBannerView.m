@@ -10,6 +10,7 @@
 #import "KCBannerCell.h"
 #import "UIImageView+WebCache.h"
 
+
 NSString *const KCBannerViewContentOffsetDicChangeNotification = @"KCBannerViewContentOffsetDicChangeNotification";
 NSString *const KCBannerViewDicChangeFrameKey = @"KCBannerViewDicChangeFrameKey";
 
